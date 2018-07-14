@@ -65,6 +65,7 @@ class Editor extends Component {
             }else{
               return <div>
                 <div><EditFreeInput 
+                  bindOnClickHistoryItem={this.props.bindOnClickHistoryItem}
                   partsName={this.props.ykState.currentElement}
                   default={this.props.ykState.history[this.props.ykState.currentElement][0]} /></div>
                 <div>{historyList}</div>

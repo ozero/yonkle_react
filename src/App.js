@@ -42,11 +42,12 @@ class App extends Component {
   //Event: 候補をクリックしたら状態を更新
   onClickHistoryItem(partsName, value) {
     console.log("onClickHistoryItem()", partsName, value);
+    
     var ea = new EditorActions();
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
   }
-  //Event
+  //Event: ナビゲーションペインの開閉
   onClickNavPaneToggle(){
     this.setState({
       isNavPaneOpen: !this.state.isNavPaneOpen
