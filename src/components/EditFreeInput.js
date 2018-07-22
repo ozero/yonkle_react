@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
-//import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import CheckCircleIcon from 'material-ui-icons/CheckCircle';
 
@@ -51,6 +50,7 @@ class EditFreeInput extends Component {
       <div className="EditFreeInput">
         <MuiThemeProvider>
           <TextField id="yk_freeinput" 
+            label="自由入力"
             className={this.props.partsName} 
             onChange={this.handleChange('name')}
             value={this.state.input} />

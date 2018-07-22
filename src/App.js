@@ -66,14 +66,16 @@ class App extends Component {
               open={this.state.isNavPaneOpen}
               onRequestChange={() => this.onClickNavPaneToggle()}
             >
-              <MenuItem>React</MenuItem>
-              <MenuItem>Redux</MenuItem>
-              <MenuItem>React Router</MenuItem>
-              <MenuItem>Material UI</MenuItem>
-              <MenuItem>Electron</MenuItem>
+              <MenuItem>Editor</MenuItem>
+              <MenuItem>History</MenuItem>
+              <MenuItem>Export</MenuItem>
+              <MenuItem>Import</MenuItem>
+              <MenuItem>About</MenuItem>
             </Drawer>
             <AppBar
+              color="default"
               title="ෆ◕◡◕"
+              style={{"background-color":"#444"}}
               onLeftIconButtonClick={ () => this.onClickNavPaneToggle()}
             />
           </div>
@@ -106,6 +108,18 @@ https://material-ui.com/demos/buttons/
 npm install material-ui --save
 
 "ReactでMaterial-UIを使ってみた - Qiita" https://qiita.com/edo1z/items/b0aa6a0e1112307246e0
+
+npm install material-ui-icons --save
+
+"reactjs - rerender react component when prop changes - Stack Overflow" https://stackoverflow.com/questions/37009328/rerender-react-component-when-prop-changes
+
+"Material-UI v1.x (beta) を導入する - Qiita" https://qiita.com/gcoka/items/bfaaea4973c5abb12ff6
+
+"Reactのコンポーネントのスタイリングをどうやるか - Qiita" https://qiita.com/lightnet328/items/218eb1c4a347302cc340
+
+
+
+
 
 
 */

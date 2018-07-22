@@ -4,6 +4,8 @@ import EditElement from '../components/EditElement';
 import EditHistoryitem from '../components/EditHistoryitem';
 import EditFreeInput from '../components/EditFreeInput';
 
+import './Editor.css';
+
 class Editor extends Component {
   //
   /*constructor(props) {
@@ -55,21 +57,29 @@ class Editor extends Component {
 
     //
     return (
-      <div className="Editor">
+      <div className="editor-container">
         {editElements}
-        <hr />
         <div>
           {(() => {
             if (this.props.ykState.currentElement === null) {
-              return <div>つーかまあ Yonkle editor in React.js alpha ですよ。</div>;
+              return <div className="editor-welcomemsg">
+                <ul>
+                  <li>上のボタンを押して、それぞれカスタマイズします。</li>
+                  <li>右下の緑のボタンを押して、クリップボードにコピーできます。</li>
+                  <li>次に開いたときも使えるよう、localStorageに保存しています</li>
+                  <li>ヘルプからヒストリ・データをリセットできます。</li>
+                </ul>
+              </div>;
             }else{
-              return <div>
-                <div><EditFreeInput 
-                  bindOnClickHistoryItem={this.props.bindOnClickHistoryItem}
-                  partsName={this.props.ykState.currentElement}
-                  default={this.props.ykState.history[this.props.ykState.currentElement][0]} /></div>
+              return <div className="editor-welcomemsg">
+                <div>
+                  <EditFreeInput 
+                    bindOnClickHistoryItem={this.props.bindOnClickHistoryItem}
+                    partsName={this.props.ykState.currentElement}
+                    default={this.props.ykState.history[this.props.ykState.currentElement][0]} />
+                  </div>
                 <div>{historyList}</div>
-                </div>;
+              </div>;
             }
           })()}
         </div>
