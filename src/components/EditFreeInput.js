@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {MuiThemeProvider} from '@material-ui/core/styles';
 import {TextField, IconButton} from '@material-ui/core';
 import {CheckCircle} from '@material-ui/icons';
 
@@ -47,22 +46,18 @@ class EditFreeInput extends Component {
   render() {
     return (
       <div className="EditFreeInput">
-        <MuiThemeProvider>
-          <TextField id="yk_freeinput" 
-            label="自由入力"
-            className={this.props.partsName} 
-            onChange={this.handleChange('name')}
-            value={this.state.input} />
-        </MuiThemeProvider>
-        <MuiThemeProvider>
-          <IconButton 
-            label="OK"
-            color="primary"
-            onClick={() => this.handleClick()}
-            style={{minWidth: '10px',margin: '4px 4px 0 0'}}
-          ><CheckCircle />
-          </IconButton>
-        </MuiThemeProvider>
+        <TextField id="yk_freeinput" 
+          label="自由入力"
+          className={this.props.partsName} 
+          onChange={this.handleChange('name')}
+          value={this.state.input} />
+        <IconButton 
+          label="OK"
+          color="primary"
+          onClick={() => this.handleClick()}
+          style={{minWidth: '10px',margin: '4px 4px 0 0'}}
+        ><CheckCircle />
+        </IconButton>
       </div>
     );
   }

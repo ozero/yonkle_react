@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {MuiThemeProvider} from '@material-ui/core/styles';
 import {Button} from '@material-ui/core';
 
 class EditElement extends Component {
@@ -20,15 +19,13 @@ class EditElement extends Component {
   render() {
     return (
       <span className="EditElement">
-        <MuiThemeProvider>
-          <Button
-            size="small" 
-            primary={true}
-            onClick={() => this.handleClick()}
-            variant="contained"
-            style={{minWidth: '10px',margin: '4px 4px 0 0'}}
-          >{this.props.value}</Button>
-        </MuiThemeProvider>
+        <Button
+          size="small" 
+          color="primary"
+          onClick={() => this.handleClick()}
+          variant="contained"
+          style={{minWidth: '10px',margin: '4px 4px 0 0'}}
+        >{this.props.value}</Button>
       </span>
     );
   }

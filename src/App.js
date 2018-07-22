@@ -4,6 +4,7 @@ import Editor from './containers/Editor';
 
 import { Typography, AppBar, Toolbar, IconButton, Drawer, MenuItem } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 class App extends Component {
 
@@ -60,8 +61,12 @@ class App extends Component {
         variant="persistent"
         anchor='left'
         open={this.state.isNavPaneOpen}
-        onClose={() => this.onClickNavPaneToggle()}
       >
+        <div >
+          <IconButton onClick={() => this.onClickNavPaneToggle() }>
+          <ChevronLeftIcon />
+          </IconButton>
+        </div>
         <MenuItem>Editor</MenuItem>
         <MenuItem>History</MenuItem>
         <MenuItem>Export</MenuItem>
