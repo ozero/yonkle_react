@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import EditorActions from './actions/EditorActions';
 import Editor from './containers/Editor';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { AppBar, MenuItem, Drawer } from 'material-ui';
-
-//import './App.css';
+import { Typography, AppBar, Toolbar, IconButton, Drawer, MenuItem } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 
 class App extends Component {
 
@@ -49,37 +47,46 @@ class App extends Component {
   }
   //Event: ナビゲーションペインの開閉
   onClickNavPaneToggle(){
+    console.log("onClickNavPaneToggle");
     this.setState({
       isNavPaneOpen: !this.state.isNavPaneOpen
     })
   }
 
-
   render() {
+
+    const drawer = (
+      <Drawer
+        variant="persistent"
+        anchor='left'
+        open={this.state.isNavPaneOpen}
+        onClose={() => this.onClickNavPaneToggle()}
+      >
+        <MenuItem>Editor</MenuItem>
+        <MenuItem>History</MenuItem>
+        <MenuItem>Export</MenuItem>
+        <MenuItem>Import</MenuItem>
+        <MenuItem>About</MenuItem>
+      </Drawer>
+    );
+
+    const appbar = (
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton color="inherit" aria-label="Menu">
+            <MenuIcon onClick={() => this.onClickNavPaneToggle()} />
+          </IconButton>
+          <Typography variant="title" color="inherit">
+          ෆ◕◡◕
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    );
+
     return (
       <div className="App">
-        <MuiThemeProvider>
-          <div>
-            <Drawer
-              docked={false}
-              width={200}
-              open={this.state.isNavPaneOpen}
-              onRequestChange={() => this.onClickNavPaneToggle()}
-            >
-              <MenuItem>Editor</MenuItem>
-              <MenuItem>History</MenuItem>
-              <MenuItem>Export</MenuItem>
-              <MenuItem>Import</MenuItem>
-              <MenuItem>About</MenuItem>
-            </Drawer>
-            <AppBar
-              color="default"
-              title="ෆ◕◡◕"
-              style={{"background-color":"#444"}}
-              onLeftIconButtonClick={ () => this.onClickNavPaneToggle()}
-            />
-          </div>
-        </MuiThemeProvider>
+        { drawer }
+        { appbar }
         <Editor 
           ykState={this.state}
           bindOnClickSelectElement={this.bindOnClickSelectElement}

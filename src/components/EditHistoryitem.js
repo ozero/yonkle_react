@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
+import {MuiThemeProvider} from '@material-ui/core/styles';
+import {Button} from '@material-ui/core';
 
 class EditHistoryitem extends Component {
 
@@ -22,12 +22,12 @@ class EditHistoryitem extends Component {
     return (
       <span className="EditHistoryitem">
         <MuiThemeProvider>
-          <RaisedButton 
-            label={this.props.value} 
+          <Button 
             default={true}
             onClick={() => this.handleClick()}
-            style={{minWidth: '10px',margin: '4px 4px 0 0'}}
-          />
+            variant="contained"
+            style={{minWidth: '10px',margin: '4px 8px 0 0'}}
+          >{this.props.value}</Button>
         </MuiThemeProvider>
       </span>
     );

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
+import {MuiThemeProvider} from '@material-ui/core/styles';
+import {Button} from '@material-ui/core';
 
 class EditElement extends Component {
 
@@ -21,13 +21,13 @@ class EditElement extends Component {
     return (
       <span className="EditElement">
         <MuiThemeProvider>
-          <RaisedButton
+          <Button
             size="small" 
-            label={this.props.value} 
             primary={true}
             onClick={() => this.handleClick()}
+            variant="contained"
             style={{minWidth: '10px',margin: '4px 4px 0 0'}}
-          />
+          >{this.props.value}</Button>
         </MuiThemeProvider>
       </span>
     );

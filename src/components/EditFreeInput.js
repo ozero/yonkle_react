@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import TextField from 'material-ui/TextField';
-import IconButton from 'material-ui/IconButton';
-import CheckCircleIcon from 'material-ui-icons/CheckCircle';
+import {MuiThemeProvider} from '@material-ui/core/styles';
+import {TextField, IconButton} from '@material-ui/core';
+import {CheckCircle} from '@material-ui/icons';
 
 
 class EditFreeInput extends Component {
@@ -61,7 +60,7 @@ class EditFreeInput extends Component {
             color="primary"
             onClick={() => this.handleClick()}
             style={{minWidth: '10px',margin: '4px 4px 0 0'}}
-          ><CheckCircleIcon />
+          ><CheckCircle />
           </IconButton>
         </MuiThemeProvider>
       </div>
