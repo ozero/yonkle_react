@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import EditorActions from './actions/EditorActions';
-import Editor from './containers/Editor';
-
-import { Typography, AppBar, Toolbar, IconButton, Drawer, MenuItem } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import EditorPane from './containers/EditorPane';
+import ClipBoardHistoryPane from './containers/ClipBoardHistoryPane';
+import ExportPane from './containers/ExportPane';
+import ImportPane from './containers/ImportPane';
+import AboutPane from './containers/AboutPane';
+import AppDrawer from './components/AppDrawer';
+import AppNavbar from './components/AppNavbar';
 
 class App extends Component {
 
@@ -15,10 +17,13 @@ class App extends Component {
     // 子コンポーネントにイベント処理を公開するため、thisをbindしておく
     this.bindOnClickSelectElement = this.onClickSelectElement.bind(this);
     this.bindOnClickHistoryItem = this.onClickHistoryItem.bind(this);
+    this.bindOnClickNavPaneToggle = this.onClickNavPaneToggle.bind(this);
+    this.bindOnClickDrawerItem = this.onClickDrawerItem.bind(this);
 
     // stateの初期値を設定
     this.state = {
       currentElement: null,
+      currentPane: "editor",
       history:{
         prefix:['おはよんくるー','大天空んくるー','頑張るんくるー','おひるんくるー'],
         faceleft:['࿑','ෆ','๑','ཛྷ྆'],
@@ -41,7 +46,6 @@ class App extends Component {
   //Event: 候補をクリックしたら状態を更新
   onClickHistoryItem(partsName, value) {
     console.log("onClickHistoryItem()", partsName, value);
-    
     var ea = new EditorActions();
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
@@ -53,51 +57,55 @@ class App extends Component {
       isNavPaneOpen: !this.state.isNavPaneOpen
     })
   }
+  //Event: コンテンツペインの切り替え
+  onClickDrawerItem(partsName) {
+    console.log("onClickDrawerItem()", partsName);
+    this.setState({ 
+      currentPane: partsName,
+      isNavPaneOpen: false
+    });
+  }
 
   render() {
-
-    const drawer = (
-      <Drawer
-        variant="persistent"
-        anchor='left'
-        open={this.state.isNavPaneOpen}
-      >
-        <div >
-          <IconButton onClick={() => this.onClickNavPaneToggle() }>
-          <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <MenuItem>Editor</MenuItem>
-        <MenuItem>History</MenuItem>
-        <MenuItem>Export</MenuItem>
-        <MenuItem>Import</MenuItem>
-        <MenuItem>About</MenuItem>
-      </Drawer>
-    );
-
-    const appbar = (
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton color="inherit" aria-label="Menu">
-            <MenuIcon onClick={() => this.onClickNavPaneToggle()} />
-          </IconButton>
-          <Typography variant="title" color="inherit">
-          ෆ◕◡◕
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    );
-
     return (
       <div className="App">
-        { drawer }
-        { appbar }
-        <Editor 
+        <AppDrawer
           ykState={this.state}
-          bindOnClickSelectElement={this.bindOnClickSelectElement}
-          bindOnClickHistoryItem={this.bindOnClickHistoryItem}
+          bindOnClickNavPaneToggle={this.bindOnClickNavPaneToggle}
+          bindOnClickDrawerItem={this.bindOnClickDrawerItem}
+        />
+        <AppNavbar
+          ykState={this.state}
+          bindOnClickNavPaneToggle={this.bindOnClickNavPaneToggle}
+        />
+        {(this.state.currentPane === "editor") && 
+          <EditorPane 
+            ykState={this.state}
+            bindOnClickSelectElement={this.bindOnClickSelectElement}
+            bindOnClickHistoryItem={this.bindOnClickHistoryItem}
           />
-      </div>
+        }
+        {(this.state.currentPane === "history") && 
+          <ClipBoardHistoryPane
+            ykState={this.state}
+          />
+        }
+        {(this.state.currentPane === "export") && 
+          <ExportPane
+            ykState={this.state}
+          />
+        }
+        {(this.state.currentPane === "import") && 
+          <ImportPane
+            ykState={this.state}
+          />
+        }
+        {(this.state.currentPane === "about") && 
+          <AboutPane
+            ykState={this.state}
+          />
+        }
+        </div>
     );
   }
 }

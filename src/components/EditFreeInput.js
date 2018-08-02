@@ -45,7 +45,7 @@ class EditFreeInput extends Component {
 
   render() {
     return (
-      <div className="EditFreeInput">
+      <div className="edit-freeinput">
         <TextField id="yk_freeinput" 
           label="自由入力"
           className={this.props.partsName} 

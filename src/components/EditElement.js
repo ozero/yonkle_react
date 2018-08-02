@@ -18,9 +18,9 @@ class EditElement extends Component {
   //
   render() {
     return (
-      <span className="EditElement">
+      <span className="edit-element">
         <Button
-          size="small" 
+          size="medium" 
           color="primary"
           onClick={() => this.handleClick()}
           variant="contained"

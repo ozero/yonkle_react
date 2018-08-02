@@ -19,7 +19,7 @@ class EditHistoryitem extends Component {
 
   render() {
     return (
-      <span className="EditHistoryitem">
+      <span className="edit-historyitem">
         <Button 
           default={true}
           onClick={() => this.handleClick()}

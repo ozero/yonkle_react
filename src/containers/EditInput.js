@@ -23,7 +23,7 @@ class EditInput extends Component {
  
   render() {
     return (
-      <div className="EditInput">
+      <div className="edit-input">
         <EditFreeInput />
         <EditElementehistory />
       </div>
