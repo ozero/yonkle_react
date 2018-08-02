@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { createMuiTheme } from '@material-ui/core/styles';
+
 import EditorActions from './actions/EditorActions';
 import EditorPane from './containers/EditorPane';
 import ClipBoardHistoryPane from './containers/ClipBoardHistoryPane';
@@ -24,26 +26,53 @@ class App extends Component {
     this.bindOnClickDrawerItem = this.onClickDrawerItem.bind(this);
     this.bindOnClickCpcb = this.onClickCpcb.bind(this);
     this.bindOnClickCpcbOpenSb = this.onClickCpcbOpenSb.bind(this);
-    this.bindOnClickSnackbarClose= this.onClickSnackbarClose.bind(this);
+    this.bindOnClickSnackbarClose = this.onClickSnackbarClose.bind(this);
+    this.bindOnImport = this.onImport.bind(this);
 
     // stateの初期値を設定
     this.state = {
+      isLoadedFromLocalstorage: false,
       currentElement: null,
       currentPane: "editor",
-      history:{
-        prefix:['おはよんくるー','大天空んくるー','頑張るんくるー','おひるんくるー'],
-        faceleft:['࿑','ෆ','๑','ཛྷ྆'],
-        eyeleft:['◕','◔','ಠ','⍥'],
-        mouth:["ف","◡","ઉ","उ","კ","؈","ᯅ","ᜌ","ᙟ","༊","ω","ب","ᗨ","و","⸐","ਊ","ت","ᓌ","咖","🍛","留","緑","雨","焼","飛","英","仏","ー"],
-        eyeright:['◕','◔','ಠ','⍥'],
-        faceright:['࿑','ෆ','๑','ཛྷ྆'],
-        suffixDingbat:["꧁","✧*｡","༺","༇","✿☆"],
-        suffixTail:["みどり💚꧂","ｷｬﾋﾟ","ｴﾝﾗｲ💚","quapi","capuit","upc"],
+      history: {
+        prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
+        faceleft: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
+        eyeleft: ['◕', '◔', 'ಠ', '⍥'],
+        mouth: ["ف", "◡", "ઉ", "उ", "კ", "؈", "ᯅ", "ᜌ", "ᙟ", "༊", "ω", "ب", "ᗨ", "و", "⸐", "ਊ", "ت", "ᓌ", "咖", "🍛", "留", "緑", "雨", "焼", "飛", "英", "仏", "ー"],
+        eyeright: ['◕', '◔', 'ಠ', '⍥'],
+        faceright: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
+        suffixDingbat: ["꧁", "✧*｡", "༺", "༇", "✿☆"],
+        suffixTail: ["みどり💚꧂", "ｷｬﾋﾟ", "ｴﾝﾗｲ💚", "quapi", "capuit", "upc"],
       },
-      isNavPaneOpen:false,
-      isSnackbarOpen:false,
-      snackBarMessage:null
+      isNavPaneOpen: false,
+      isSnackbarOpen: false,
+      snackBarMessage: null
     };
+
+    this.ykTheme = createMuiTheme({});
+  }
+
+  //Lifecycle: ComponentがDOMツリーに追加される前に一度だけ呼ばれます。
+  componentWillMount() {
+    //ヒストリの読み込み
+    if (!this.state.isLoadedFromLocalstorage) {
+      const ea = new EditorActions();
+      if (!window.localStorage.yonkle_editor) {
+        ea.historySerializer(this.state.history);//初期化
+      } else {
+        let lshistory = JSON.parse(window.localStorage.yonkle_editor);
+        if (!lshistory.prefix) {
+          ea.historySerializer(this.state.history);//初期化
+        } else {
+          //読み込み&フラグ立てる
+          this.setState({
+            history: lshistory,
+            isLoadedFromLocalstorage: true
+          });
+        }
+      }
+    }
+
   }
 
   //Event: 文節をクリックしたら候補を表示
@@ -55,16 +84,17 @@ class App extends Component {
     const ea = new EditorActions();
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
+    ea.historySerializer(newHistory);
   }
   //Event: ナビゲーションペインの開閉
-  onClickNavPaneToggle(){
+  onClickNavPaneToggle() {
     this.setState({
       isNavPaneOpen: !this.state.isNavPaneOpen
     })
   }
   //Event: コンテンツペインの切り替え
   onClickDrawerItem(partsName) {
-    this.setState({ 
+    this.setState({
       currentPane: partsName,
       isNavPaneOpen: false
     });
@@ -77,8 +107,7 @@ class App extends Component {
   }
   //Event:クリップボードにコピー、のクリック時: メッセージ表示
   onClickCpcbOpenSb() {
-    console.log("onClickCpcb openSb");
-    this.setState({ 
+    this.setState({
       isSnackbarOpen: true,
       snackBarMessage: "クリップボードにコピーしました"
     });
@@ -91,6 +120,15 @@ class App extends Component {
     this.setState({ isSnackbarOpen: false });
   }
 
+  //インポート用データユーティリティ
+  onImport(){
+    let lshistory = JSON.parse(window.localStorage.yonkle_editor);
+    this.setState({
+      history: lshistory,
+      isLoadedFromLocalstorage: true
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -101,33 +139,38 @@ class App extends Component {
         />
         <AppNavbar
           ykState={this.state}
+          ykTheme={this.ykTheme}
           bindOnClickNavPaneToggle={this.bindOnClickNavPaneToggle}
         />
-        {(this.state.currentPane === "editor") && 
-          <EditorPane 
+        {(this.state.currentPane === "editor") &&
+          <EditorPane
             ykState={this.state}
+            ykTheme={this.ykTheme}
             bindOnClickSelectElement={this.bindOnClickSelectElement}
             bindOnClickHistoryItem={this.bindOnClickHistoryItem}
             bindOnClickCpcb={this.bindOnClickCpcb}
             bindOnClickCpcbOpenSb={this.bindOnClickCpcbOpenSb}
           />
         }
-        {(this.state.currentPane === "history") && 
+        {(this.state.currentPane === "history") &&
           <ClipBoardHistoryPane
             ykState={this.state}
           />
         }
-        {(this.state.currentPane === "export") && 
+        {(this.state.currentPane === "export") &&
           <ExportPane
             ykState={this.state}
+            ykTheme={this.ykTheme}
+            bindOnClickCpcbOpenSb={this.bindOnClickCpcbOpenSb}
           />
         }
-        {(this.state.currentPane === "import") && 
+        {(this.state.currentPane === "import") &&
           <ImportPane
             ykState={this.state}
+            bindOnImport={this.bindOnImport}
           />
         }
-        {(this.state.currentPane === "about") && 
+        {(this.state.currentPane === "about") &&
           <AboutPane
             ykState={this.state}
           />
@@ -170,7 +213,8 @@ npm install material-ui-icons --save
 
 "Reactのコンポーネントのスタイリングをどうやるか - Qiita" https://qiita.com/lightnet328/items/218eb1c4a347302cc340
 
-
+javascript - In reactJS, how to copy text to clipboard? - Stack Overflow
+https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
 
 
 

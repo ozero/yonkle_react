@@ -21,6 +21,13 @@ class EditorActions {
     return tmpHistory;
   }
 
+  //
+  historySerializer = (h) => {
+    window.localStorage.yonkle_editor = JSON.stringify(h);
+    console.log("historySerializer wrote")
+    return;
+  }
+
   //「クリップボードにコピー」時に、エディタの内容をつなげて成果物を返すやつ
   yonkleFinalizer = (h) => {
     return [

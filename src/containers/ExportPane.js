@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { Button } from '@material-ui/core';
+import { ContentCopy } from '@material-ui/icons/';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+
 class ExportPane extends Component {
   //
   /*constructor(props) {
@@ -10,7 +15,8 @@ class ExportPane extends Component {
   //
   static propTypes = {
     ykState: PropTypes.object.isRequired,
-    //bindOnClickSelectElement: PropTypes.func.isRequired,
+    ykTheme: PropTypes.object.isRequired,
+    bindOnClickCpcbOpenSb: PropTypes.func.isRequired,
     //bindOnClickHistoryItem: PropTypes.func.isRequired,
   };
 
@@ -18,7 +24,24 @@ class ExportPane extends Component {
     //
     return (
       <div className="pane-container">
-        ExportPane
+        <p>Export:</p>
+        <div>
+          <textarea
+            style={{width:"100%", height:"10em", fontSize:"80%"}}
+          >
+            {JSON.stringify(this.props.ykState.history)}
+          </textarea>
+        </div>
+        <div style={{textAlign:"center"}}>
+          <CopyToClipboard 
+            text={JSON.stringify(this.props.ykState.history)} 
+            onCopy={() => this.props.bindOnClickCpcbOpenSb()}
+          >
+            <Button className="yk-export" color='secondary' variant="contained">
+              <ContentCopy />&nbsp;&nbsp;&nbsp;内容をクリップボードにコピー
+            </Button>        
+          </CopyToClipboard>
+        </div>
       </div>
     );
   }

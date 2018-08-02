@@ -5,11 +5,8 @@ import EditHistoryitem from '../components/EditHistoryitem';
 import EditFreeInput from '../components/EditFreeInput';
 
 import { Button } from '@material-ui/core';
-import { createMuiTheme } from '@material-ui/core/styles';
 import { ContentCopy } from '@material-ui/icons/';
 import CopyToClipboard from 'react-copy-to-clipboard';
-
-const theme = createMuiTheme({});
 
 class EditorPane extends Component {
   //
@@ -20,6 +17,7 @@ class EditorPane extends Component {
   //
   static propTypes = {
     ykState: PropTypes.object.isRequired,
+    ykTheme: PropTypes.object.isRequired,
     bindOnClickSelectElement: PropTypes.func.isRequired,
     bindOnClickHistoryItem: PropTypes.func.isRequired,
     bindOnClickCpcb: PropTypes.func.isRequired,
@@ -93,11 +91,11 @@ class EditorPane extends Component {
         <CopyToClipboard 
           text={this.props.bindOnClickCpcb()} 
           onCopy={() => this.props.bindOnClickCpcbOpenSb()}
-          >
+        >
           <Button variant="fab" className="yk-fab" color='primary' style={{
             position: 'absolute',
-            bottom: theme.spacing.unit * 2,
-            right: theme.spacing.unit * 2,
+            bottom: this.props.ykTheme.spacing.unit * 2,
+            right: this.props.ykTheme.spacing.unit * 2,
           }}>
             <ContentCopy />
           </Button>        

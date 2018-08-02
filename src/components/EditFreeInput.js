@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {TextField, IconButton} from '@material-ui/core';
 import {CheckCircle} from '@material-ui/icons';
 
-
 class EditFreeInput extends Component {
   //
   static propTypes = {
@@ -28,15 +27,6 @@ class EditFreeInput extends Component {
   }
 
   //
-  handleClick() {
-    console.log("EditFreeInput::handleClick()", 
-      this.state.input, 
-      this.props.partsName
-    );
-    this.props.bindOnClickHistoryItem(this.props.partsName, this.state.input);
-  }
-  
-  //
   handleChange = name => event => {
     this.setState({
       input: event.target.value,
@@ -54,9 +44,10 @@ class EditFreeInput extends Component {
         <IconButton 
           label="OK"
           color="primary"
-          onClick={() => this.handleClick()}
+          onClick={() => this.props.bindOnClickHistoryItem(this.props.partsName, this.state.input)}
           style={{minWidth: '10px',margin: '4px 4px 0 0'}}
-        ><CheckCircle />
+        >
+          <CheckCircle />
         </IconButton>
       </div>
     );
