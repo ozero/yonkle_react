@@ -17,7 +17,7 @@ class ExportPane extends Component {
   render() {
     //
     return (
-      <div className="exportpane-container">
+      <div className="pane-container">
         ExportPane
       </div>
     );

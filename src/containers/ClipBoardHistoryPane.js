@@ -17,7 +17,7 @@ class ClipBoardHistoryPane extends Component {
   render() {
     //
     return (
-      <div className="clipboardhistory-container">
+      <div className="pane-container">
         clipboard history item list.
       </div>
     );

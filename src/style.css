@@ -1,0 +1,12 @@
+.pane-container {
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.pane-well {
+  margin:24px 4px 16px 4px;
+  border:1px solid #d0d0d0;
+  padding: 4px 10px 16px 10px;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}

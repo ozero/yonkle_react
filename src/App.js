@@ -8,6 +8,8 @@ import AboutPane from './containers/AboutPane';
 import AppDrawer from './components/AppDrawer';
 import AppNavbar from './components/AppNavbar';
 
+import './style.css';
+
 class App extends Component {
 
   //
@@ -40,26 +42,22 @@ class App extends Component {
   
   //Event: 文節をクリックしたら候補を表示
   onClickSelectElement(partsName) {
-    console.log("onClickSelectElement()", partsName);
     this.setState({ currentElement: partsName });
   }
   //Event: 候補をクリックしたら状態を更新
   onClickHistoryItem(partsName, value) {
-    console.log("onClickHistoryItem()", partsName, value);
     var ea = new EditorActions();
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
   }
   //Event: ナビゲーションペインの開閉
   onClickNavPaneToggle(){
-    console.log("onClickNavPaneToggle");
     this.setState({
       isNavPaneOpen: !this.state.isNavPaneOpen
     })
   }
   //Event: コンテンツペインの切り替え
   onClickDrawerItem(partsName) {
-    console.log("onClickDrawerItem()", partsName);
     this.setState({ 
       currentPane: partsName,
       isNavPaneOpen: false

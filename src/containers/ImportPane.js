@@ -17,7 +17,7 @@ class ImportPane extends Component {
   render() {
     //
     return (
-      <div className="importpane-container">
+      <div className="pane-container">
         ImportPane
       </div>
     );

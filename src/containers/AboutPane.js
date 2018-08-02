@@ -17,8 +17,10 @@ class AboutPane extends Component {
   render() {
     //
     return (
-      <div className="aboutpane-container">
-        AboutPane
+      <div className="pane-container">
+        <div className="pane-well">
+          あなたのエージェントライフによんくるのご加護がありますように…。
+        </div>
       </div>
     );
   }

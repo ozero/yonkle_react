@@ -4,8 +4,6 @@ import EditElement from '../components/EditElement';
 import EditHistoryitem from '../components/EditHistoryitem';
 import EditFreeInput from '../components/EditFreeInput';
 
-import './EditorPane.css';
-
 class EditorPane extends Component {
   //
   /*constructor(props) {
@@ -57,12 +55,12 @@ class EditorPane extends Component {
 
     //
     return (
-      <div className="editor-container">
+      <div className="pane-container">
         {editElements}
         <div>
           {(() => {
             if (this.props.ykState.currentElement === null) {
-              return <div className="editor-welcomemsg">
+              return <div className="pane-well">
                 <ul>
                   <li>上のボタンを押して、それぞれカスタマイズします。</li>
                   <li>右下の緑のボタンを押して、クリップボードにコピーできます。</li>
@@ -71,7 +69,7 @@ class EditorPane extends Component {
                 </ul>
               </div>;
             }else{
-              return <div className="editor-welcomemsg">
+              return <div className="pane-well">
                 <div>
                   <EditFreeInput 
                     bindOnClickHistoryItem={this.props.bindOnClickHistoryItem}
