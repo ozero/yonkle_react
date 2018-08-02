@@ -4,6 +4,13 @@ import EditElement from '../components/EditElement';
 import EditHistoryitem from '../components/EditHistoryitem';
 import EditFreeInput from '../components/EditFreeInput';
 
+import { Button } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ContentCopy } from '@material-ui/icons/';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+const theme = createMuiTheme({});
+
 class EditorPane extends Component {
   //
   /*constructor(props) {
@@ -15,6 +22,8 @@ class EditorPane extends Component {
     ykState: PropTypes.object.isRequired,
     bindOnClickSelectElement: PropTypes.func.isRequired,
     bindOnClickHistoryItem: PropTypes.func.isRequired,
+    bindOnClickCpcb: PropTypes.func.isRequired,
+    bindOnClickCpcbOpenSb: PropTypes.func.isRequired,
   };
 
   spawnEditElement(key, partsName){
@@ -58,29 +67,43 @@ class EditorPane extends Component {
       <div className="pane-container">
         {editElements}
         <div>
-          {(() => {
-            if (this.props.ykState.currentElement === null) {
-              return <div className="pane-well">
-                <ul>
-                  <li>上のボタンを押して、それぞれカスタマイズします。</li>
-                  <li>右下の緑のボタンを押して、クリップボードにコピーできます。</li>
-                  <li>次に開いたときも使えるよう、localStorageに保存しています</li>
-                  <li>ヘルプからヒストリ・データをリセットできます。</li>
-                </ul>
-              </div>;
-            }else{
-              return <div className="pane-well">
-                <div>
-                  <EditFreeInput 
-                    bindOnClickHistoryItem={this.props.bindOnClickHistoryItem}
-                    partsName={this.props.ykState.currentElement}
-                    default={this.props.ykState.history[this.props.ykState.currentElement][0]} />
-                  </div>
-                <div>{historyList}</div>
-              </div>;
-            }
-          })()}
+          { (this.props.ykState.currentElement === null) &&
+            <div className="pane-well">
+              <ul>
+                <li>上のボタンを押して、それぞれカスタマイズします。</li>
+                <li>右下の緑のボタンを押して、クリップボードにコピーできます。</li>
+                <li>次に開いたときも使えるよう、localStorageに保存しています</li>
+                <li>ヘルプからヒストリ・データをリセットできます。</li>
+              </ul>
+            </div>
+          }
+          { (this.props.ykState.currentElement !== null) &&
+            <div className="pane-well">
+              <div>
+                <EditFreeInput 
+                  bindOnClickHistoryItem={this.props.bindOnClickHistoryItem}
+                  partsName={this.props.ykState.currentElement}
+                  default={this.props.ykState.history[this.props.ykState.currentElement][0]} />
+                </div>
+              <div>{historyList}</div>
+            </div>
+          }
         </div>
+
+        <CopyToClipboard 
+          text={this.props.bindOnClickCpcb()} 
+          onCopy={() => this.props.bindOnClickCpcbOpenSb()}
+          >
+          <Button variant="fab" className="yk-fab" color='primary' style={{
+            position: 'absolute',
+            bottom: theme.spacing.unit * 2,
+            right: theme.spacing.unit * 2,
+          }}>
+            <ContentCopy />
+          </Button>        
+        </CopyToClipboard>
+
+
       </div>
     );
   }

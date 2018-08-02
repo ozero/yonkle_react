@@ -7,6 +7,7 @@ import ImportPane from './containers/ImportPane';
 import AboutPane from './containers/AboutPane';
 import AppDrawer from './components/AppDrawer';
 import AppNavbar from './components/AppNavbar';
+import AppSnackbar from './components/AppSnackbar';
 
 import './style.css';
 
@@ -21,6 +22,9 @@ class App extends Component {
     this.bindOnClickHistoryItem = this.onClickHistoryItem.bind(this);
     this.bindOnClickNavPaneToggle = this.onClickNavPaneToggle.bind(this);
     this.bindOnClickDrawerItem = this.onClickDrawerItem.bind(this);
+    this.bindOnClickCpcb = this.onClickCpcb.bind(this);
+    this.bindOnClickCpcbOpenSb = this.onClickCpcbOpenSb.bind(this);
+    this.bindOnClickSnackbarClose= this.onClickSnackbarClose.bind(this);
 
     // stateの初期値を設定
     this.state = {
@@ -36,17 +40,19 @@ class App extends Component {
         suffixDingbat:["꧁","✧*｡","༺","༇","✿☆"],
         suffixTail:["みどり💚꧂","ｷｬﾋﾟ","ｴﾝﾗｲ💚","quapi","capuit","upc"],
       },
-      isNavPaneOpen:false
+      isNavPaneOpen:false,
+      isSnackbarOpen:false,
+      snackBarMessage:null
     };
   }
-  
+
   //Event: 文節をクリックしたら候補を表示
   onClickSelectElement(partsName) {
     this.setState({ currentElement: partsName });
   }
   //Event: 候補をクリックしたら状態を更新
   onClickHistoryItem(partsName, value) {
-    var ea = new EditorActions();
+    const ea = new EditorActions();
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
   }
@@ -62,6 +68,27 @@ class App extends Component {
       currentPane: partsName,
       isNavPaneOpen: false
     });
+  }
+  //Event:クリップボードにコピー、のクリック時: 成果物うけとり
+  onClickCpcb() {
+    console.log("onClickCpcb");
+    const ea = new EditorActions();
+    return ea.yonkleFinalizer(this.state.history);
+  }
+  //Event:クリップボードにコピー、のクリック時: メッセージ表示
+  onClickCpcbOpenSb() {
+    console.log("onClickCpcb openSb");
+    this.setState({ 
+      isSnackbarOpen: true,
+      snackBarMessage: "クリップボードにコピーしました"
+    });
+  }
+  //Event:スナックバーのクローズ時
+  onClickSnackbarClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({ isSnackbarOpen: false });
   }
 
   render() {
@@ -81,6 +108,8 @@ class App extends Component {
             ykState={this.state}
             bindOnClickSelectElement={this.bindOnClickSelectElement}
             bindOnClickHistoryItem={this.bindOnClickHistoryItem}
+            bindOnClickCpcb={this.bindOnClickCpcb}
+            bindOnClickCpcbOpenSb={this.bindOnClickCpcbOpenSb}
           />
         }
         {(this.state.currentPane === "history") && 
@@ -103,7 +132,13 @@ class App extends Component {
             ykState={this.state}
           />
         }
-        </div>
+
+        <AppSnackbar
+          ykState={this.state}
+          bindOnClickSnackbarClose={this.bindOnClickSnackbarClose}
+        />
+
+      </div>
     );
   }
 }

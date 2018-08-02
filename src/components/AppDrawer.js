@@ -19,7 +19,7 @@ class AppDrawer extends Component {
 
   render() {
     return (
-      <Drawer classname="app-drawer"
+      <Drawer className="app-drawer"
         variant="temporary"
         anchor='left'
         open={this.props.ykState.isNavPaneOpen}
