@@ -20,14 +20,14 @@ class App extends Component {
     super(props);
 
     // 子コンポーネントにイベント処理を公開するため、thisをbindしておく
-    this.bindOnClickSelectElement = this.onClickSelectElement.bind(this);
-    this.bindOnClickHistoryItem = this.onClickHistoryItem.bind(this);
+    this.bindOnClickEditorSelectElement = this.onClickEditorSelectElement.bind(this);
+    this.bindOnClickEditorHistoryItem = this.onClickEditorHistoryItem.bind(this);
     this.bindOnClickNavPaneToggle = this.onClickNavPaneToggle.bind(this);
     this.bindOnClickDrawerItem = this.onClickDrawerItem.bind(this);
-    this.bindOnClickCpcb = this.onClickCpcb.bind(this);
-    this.bindOnClickCpcbOpenSb = this.onClickCpcbOpenSb.bind(this);
+    this.bindOnClickEditorCopytext = this.onClickEditorCopytext.bind(this);
     this.bindOnClickSnackbarClose = this.onClickSnackbarClose.bind(this);
     this.bindOnImport = this.onImport.bind(this);
+    this.bindOnClickExportCopytext = this.onClickExportCopytext.bind(this);
 
     this.initHistory = {
       yk_prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
@@ -43,8 +43,9 @@ class App extends Component {
     // stateの初期値を設定
     this.state = {
       isLoadedFromLocalstorage: false,
-      currentElement: null,
-      currentPane: "editor",
+      current_element: null,
+      current_pane: "editor",
+      current_finalized: null,
       history: this.initHistory,
       clipboard_history:[],
       isNavPaneOpen: false,
@@ -61,15 +62,16 @@ class App extends Component {
     if (!this.state.isLoadedFromLocalstorage) {
       const ea = new EditorActions();
       if (!window.localStorage.yonkle_editor) {
-        ea.historySerializer(this.state.history);//初期化
+        ea.historySerializer(this.state.history, []);//初期化
       } else {
-        let lshistory = JSON.parse(window.localStorage.yonkle_editor);
-        if (!lshistory.history) {
-          ea.historySerializer(this.state.history);//初期化
+        let tmpLocalStorage = JSON.parse(window.localStorage.yonkle_editor);
+        if (!tmpLocalStorage.history) {
+          ea.historySerializer(this.state.history, []);//初期化
         } else {
           //読み込み&フラグ立てる
           this.setState({
-            history: lshistory.history,
+            history: tmpLocalStorage.history,
+            clipboard_history: tmpLocalStorage.clipboard_history,
             isLoadedFromLocalstorage: true
           });
         }
@@ -79,60 +81,82 @@ class App extends Component {
   }
 
   //Event: 文節をクリックしたら候補を表示
-  onClickSelectElement(partsName) {
-    this.setState({ currentElement: partsName });
+  onClickEditorSelectElement(partsName) {
+    console.log("onClickEditorSelectElement");
+    this.setState({ current_element: partsName });
   }
   //Event: 候補をクリックしたら状態を更新
-  onClickHistoryItem(partsName, value) {
+  onClickEditorHistoryItem(partsName, value) {
+    console.log("onClickEditorHistoryItem");
     const ea = new EditorActions();
+    //アイテム履歴を更新
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
-    ea.historySerializer(newHistory);
+    //ローカスストレージに保存s
+    ea.historySerializer(newHistory, this.state.clipboard_history);
+    //クリップボードにコピーする内容を更新
+    const newItem = ea.yonkleFinalizer(this.state.history);
+    this.setState({
+      current_finalized: newItem
+    });
   }
   //Event: ナビゲーションペインの開閉
   onClickNavPaneToggle() {
+    console.log("onClickNavPaneToggle");
     this.setState({
       isNavPaneOpen: !this.state.isNavPaneOpen
     })
   }
   //Event: コンテンツペインの切り替え
   onClickDrawerItem(partsName) {
+    console.log("onClickDrawerItem");
     this.setState({
-      currentPane: partsName,
+      current_pane: partsName,
       isNavPaneOpen: false
     });
   }
-  //Event:クリップボードにコピー、のクリック時: 成果物うけとり
-  onClickCpcb() {
+  //Event:Editor:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
+  onClickEditorCopytext() {
+    console.log("onClickEditorCopytext");
     const ea = new EditorActions();
-    return ea.yonkleFinalizer(this.state.history);
-  }
-  //Event:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
-  onClickCpcbOpenSb() {
+    const newCb = ea.cbstackBuilder(
+      this.state.clipboard_history, this.state.current_finalized
+    );
     this.setState({
       isSnackbarOpen: true,
-      snackBarMessage: "クリップボードにコピーしました"
+      snackBarMessage: "クリップボードにコピーしました",
+      clipboard_history: newCb
     });
   }
   //Event:スナックバーのクローズ時
   onClickSnackbarClose(event, reason) {
+    console.log("onClickSnackbarClose");
     if (reason === 'clickaway') {
       return;
     }
     this.setState({ isSnackbarOpen: false });
   }
+  //
+  onClickExportCopytext(){
+
+  }
+
   //Event:historyのリセット時
   onClickReset() {
+    console.log("onClickReset");
     delete window.localStorage.yonkle_editor;
     this.setState({history: this.initHistory});
   }
 
   //インポート用データユーティリティ
   onImport() {
+    console.log("onImport");
     let lshistory = JSON.parse(window.localStorage.yonkle_editor);
     this.setState({
       history: lshistory,
-      isLoadedFromLocalstorage: true
+      isLoadedFromLocalstorage: true,
+      isSnackbarOpen: true,
+      snackBarMessage: "インポートしました"
     });
   }
 
@@ -149,35 +173,34 @@ class App extends Component {
           ykTheme={this.ykTheme}
           bindOnClickNavPaneToggle={this.bindOnClickNavPaneToggle}
         />
-        {(this.state.currentPane === "editor") &&
+        {(this.state.current_pane === "editor") &&
           <EditorPane
             ykState={this.state}
             ykTheme={this.ykTheme}
-            bindOnClickSelectElement={this.bindOnClickSelectElement}
-            bindOnClickHistoryItem={this.bindOnClickHistoryItem}
-            bindOnClickCpcb={this.bindOnClickCpcb}
-            bindOnClickCpcbOpenSb={this.bindOnClickCpcbOpenSb}
+            bindOnClickEditorSelectElement={this.bindOnClickEditorSelectElement}
+            bindOnClickEditorHistoryItem={this.bindOnClickEditorHistoryItem}
+            bindOnClickEditorCopytext={this.bindOnClickEditorCopytext}
           />
         }
-        {(this.state.currentPane === "history") &&
+        {(this.state.current_pane === "history") &&
           <ClipBoardHistoryPane
             ykState={this.state}
           />
         }
-        {(this.state.currentPane === "export") &&
+        {(this.state.current_pane === "export") &&
           <ExportPane
             ykState={this.state}
             ykTheme={this.ykTheme}
-            bindOnClickCpcbOpenSb={this.bindOnClickCpcbOpenSb}
+            bindOnClickExportCopytext={this.bindOnClickExportCopytext}
           />
         }
-        {(this.state.currentPane === "import") &&
+        {(this.state.current_pane === "import") &&
           <ImportPane
             ykState={this.state}
             bindOnImport={this.bindOnImport}
           />
         }
-        {(this.state.currentPane === "about") &&
+        {(this.state.current_pane === "about") &&
           <AboutPane
             ykState={this.state}
           />
@@ -224,6 +247,10 @@ javascript - In reactJS, how to copy text to clipboard? - Stack Overflow
 https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
 
 
+bindOnClickExportCopytextの実装
+IMport時のSnackBar通知
+CbHistory実装
 
+あたりかな？
 
 */

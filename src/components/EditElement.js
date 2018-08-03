@@ -6,7 +6,7 @@ class EditElement extends Component {
 
   //
   static propTypes = {
-    bindOnClickSelectElement: PropTypes.func.isRequired,
+    bindOnClickEditorSelectElement: PropTypes.func.isRequired,
   };
   
   //
@@ -16,7 +16,7 @@ class EditElement extends Component {
         <Button
           size="medium" 
           color="primary"
-          onClick={() => this.props.bindOnClickSelectElement(this.props.partsName)}
+          onClick={() => this.props.bindOnClickEditorSelectElement(this.props.partsName)}
           variant="contained"
           style={{minWidth: '10px',margin: '4px 4px 0 0', fontSize:"14px", textTransform:"none"}}
         >{this.props.value}</Button>

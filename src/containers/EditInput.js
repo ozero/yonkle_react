@@ -17,10 +17,6 @@ class EditInput extends Component {
     };
   }
 
-  // コールバック関数
-  myfunction(str) {
-  }
- 
   render() {
     return (
       <div className="edit-input">

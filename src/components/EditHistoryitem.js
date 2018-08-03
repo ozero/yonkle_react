@@ -6,7 +6,7 @@ class EditHistoryitem extends Component {
 
   //
   static propTypes = {
-    bindOnClickHistoryItem: PropTypes.func.isRequired,
+    bindOnClickEditorHistoryItem: PropTypes.func.isRequired,
   };
 
   //
@@ -14,7 +14,7 @@ class EditHistoryitem extends Component {
     console.log("EditHistoryitem::handleClick()", 
       this.props.value, 
       this.props.partsName);
-    this.props.bindOnClickHistoryItem(this.props.partsName, this.props.value);
+    this.props.bindOnClickEditorHistoryItem(this.props.partsName, this.props.value);
   }
 
   render() {

@@ -16,8 +16,7 @@ class ExportPane extends Component {
   static propTypes = {
     ykState: PropTypes.object.isRequired,
     ykTheme: PropTypes.object.isRequired,
-    bindOnClickCpcbOpenSb: PropTypes.func.isRequired,
-    //bindOnClickHistoryItem: PropTypes.func.isRequired,
+    bindOnClickExportCopytext: PropTypes.func.isRequired
   };
 
   render() {
@@ -35,7 +34,7 @@ class ExportPane extends Component {
         <div style={{textAlign:"center"}}>
           <CopyToClipboard 
             text={JSON.stringify(this.props.ykState.history)} 
-            onCopy={() => this.props.bindOnClickCpcbOpenSb()}
+            onCopy={() => this.props.bindOnClickExportCopytext()}
           >
             <Button className="yk-export" color='secondary' variant="contained">
               <ContentCopy />&nbsp;&nbsp;&nbsp;内容をクリップボードにコピー

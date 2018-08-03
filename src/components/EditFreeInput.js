@@ -8,7 +8,7 @@ class EditFreeInput extends Component {
   static propTypes = {
     partsName: PropTypes.string.isRequired,
     default: PropTypes.string.isRequired,
-    bindOnClickHistoryItem: PropTypes.func.isRequired,
+    bindOnClickEditorHistoryItem: PropTypes.func.isRequired,
   };
 
   //
@@ -44,7 +44,7 @@ class EditFreeInput extends Component {
         <IconButton 
           label="OK"
           color="primary"
-          onClick={() => this.props.bindOnClickHistoryItem(this.props.partsName, this.state.input)}
+          onClick={() => this.props.bindOnClickEditorHistoryItem(this.props.partsName, this.state.input)}
           style={{minWidth: '10px',margin: '4px 4px 0 0'}}
         >
           <CheckCircle />

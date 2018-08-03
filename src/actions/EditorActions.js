@@ -22,8 +22,11 @@ class EditorActions {
   }
 
   //
-  historySerializer = (h) => {
-    window.localStorage.yonkle_editor = JSON.stringify({history: h});
+  historySerializer = (h, cbh) => {
+    window.localStorage.yonkle_editor = JSON.stringify({
+      history: h,
+      clipboard_history: cbh
+    });
     console.log("historySerializer wrote")
     return;
   }
@@ -41,6 +44,7 @@ class EditorActions {
     }
     //
     tmpCb.unshift(newItem);
+    console.log("cbstackBuilder", newItem, tmpCb);
     return tmpCb;
   }
 

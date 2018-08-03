@@ -31,31 +31,31 @@ class AppDrawer extends Component {
         </div>
         <MenuItem className="appdrawer-menuitem"
           onClick={() => this.props.bindOnClickDrawerItem("editor") }
-          selected={(this.props.ykState.currentPane === "editor")}
+          selected={(this.props.ykState.current_pane === "editor")}
         >
           <Edit className="menuitem-icon" />Editor
         </MenuItem>
         <MenuItem className="appdrawer-menuitem"
           onClick={() => this.props.bindOnClickDrawerItem("history") }
-          selected={(this.props.ykState.currentPane === "history")}
+          selected={(this.props.ykState.current_pane === "history")}
         >
           <History className="menuitem-icon" />History
         </MenuItem>
         <MenuItem className="appdrawer-menuitem"
           onClick={() => this.props.bindOnClickDrawerItem("export") }
-          selected={(this.props.ykState.currentPane === "export")}
+          selected={(this.props.ykState.current_pane === "export")}
         >
           <ExitToApp className="menuitem-icon" />Export
         </MenuItem>
         <MenuItem className="appdrawer-menuitem"
           onClick={() => this.props.bindOnClickDrawerItem("import") }
-          selected={(this.props.ykState.currentPane === "import")}
+          selected={(this.props.ykState.current_pane === "import")}
         >
           <GetApp className="menuitem-icon" />Import
         </MenuItem>
         <MenuItem className="appdrawer-menuitem"
           onClick={() => this.props.bindOnClickDrawerItem("about") }
-          selected={(this.props.ykState.currentPane === "about")}
+          selected={(this.props.ykState.current_pane === "about")}
         >
           <Info className="menuitem-icon" />About
         </MenuItem>
