@@ -10,18 +10,22 @@ class ClipBoardHistoryPane extends Component {
 
   //
   static propTypes = {
-    ykState: PropTypes.object.isRequired,
+    yk_state: PropTypes.object.isRequired,
     //bindOnClickEditorSelectElement: PropTypes.func.isRequired,
     //bindOnClickEditorHistoryItem: PropTypes.func.isRequired,
   };
 
   render() {
     let cbHistory = [];
-    for(let i in this.props.ykState.clipboard_history){
-      console.log("cbHistory", i, this.props.ykState.clipboard_history[i]);
-      cbHistory.push(<Button variant="contained" className="cbh_item" key={i}>
-        {this.props.ykState.clipboard_history[i]}
-      </Button>);
+    for(let i in this.props.yk_state.clipboard_history){
+      if(this.props.yk_state.clipboard_history[i] === null){
+        continue;
+      }
+      cbHistory.push(
+        <div className="cbh_item" key={i}><Button variant="contained" className="cbh_item">
+          {this.props.yk_state.clipboard_history[i]}
+        </Button></div>
+      );
     }
 
     //

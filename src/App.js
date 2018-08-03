@@ -29,7 +29,7 @@ class App extends Component {
     this.bindOnImport = this.onImport.bind(this);
     this.bindOnClickExportCopytext = this.onClickExportCopytext.bind(this);
 
-    this.initHistory = {
+    this.initial_history = {
       yk_prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
       yk_face_left: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
       yk_eye_left: ['◕', '◔', 'ಠ', '⍥'],
@@ -42,15 +42,15 @@ class App extends Component {
 
     // stateの初期値を設定
     this.state = {
-      isLoadedFromLocalstorage: false,
+      is_loaded_from_localstorage: false,
       current_element: null,
       current_pane: "editor",
       current_finalized: null,
-      history: this.initHistory,
+      history: this.initial_history,
       clipboard_history:[],
-      isNavPaneOpen: false,
-      isSnackbarOpen: false,
-      snackBarMessage: null
+      is_navpane_open: false,
+      is_snackbar_open: false,
+      snackbar_message: null
     };
 
     this.ykTheme = createMuiTheme({});
@@ -59,7 +59,7 @@ class App extends Component {
   //Lifecycle: ComponentがDOMツリーに追加される前に一度だけ呼ばれます。
   componentWillMount() {
     //ヒストリの読み込み
-    if (!this.state.isLoadedFromLocalstorage) {
+    if (!this.state.is_loaded_from_localstorage) {
       const ea = new EditorActions();
       if (!window.localStorage.yonkle_editor) {
         ea.historySerializer(this.state.history, []);//初期化
@@ -72,7 +72,7 @@ class App extends Component {
           this.setState({
             history: tmpLocalStorage.history,
             clipboard_history: tmpLocalStorage.clipboard_history,
-            isLoadedFromLocalstorage: true
+            is_loaded_from_localstorage: true
           });
         }
       }
@@ -104,7 +104,7 @@ class App extends Component {
   onClickNavPaneToggle() {
     console.log("onClickNavPaneToggle");
     this.setState({
-      isNavPaneOpen: !this.state.isNavPaneOpen
+      is_navpane_open: !this.state.is_navpane_open
     })
   }
   //Event: コンテンツペインの切り替え
@@ -112,7 +112,7 @@ class App extends Component {
     console.log("onClickDrawerItem");
     this.setState({
       current_pane: partsName,
-      isNavPaneOpen: false
+      is_navpane_open: false
     });
   }
   //Event:Editor:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
@@ -123,8 +123,8 @@ class App extends Component {
       this.state.clipboard_history, this.state.current_finalized
     );
     this.setState({
-      isSnackbarOpen: true,
-      snackBarMessage: "クリップボードにコピーしました",
+      is_snackbar_open: true,
+      snackbar_message: "クリップボードにコピーしました",
       clipboard_history: newCb
     });
   }
@@ -134,7 +134,7 @@ class App extends Component {
     if (reason === 'clickaway') {
       return;
     }
-    this.setState({ isSnackbarOpen: false });
+    this.setState({ is_snackbar_open: false });
   }
   //
   onClickExportCopytext(){
@@ -154,9 +154,9 @@ class App extends Component {
     let lshistory = JSON.parse(window.localStorage.yonkle_editor);
     this.setState({
       history: lshistory,
-      isLoadedFromLocalstorage: true,
-      isSnackbarOpen: true,
-      snackBarMessage: "インポートしました"
+      is_loaded_from_localstorage: true,
+      is_snackbar_open: true,
+      snackbar_message: "インポートしました"
     });
   }
 
@@ -164,18 +164,18 @@ class App extends Component {
     return (
       <div className="App">
         <AppDrawer
-          ykState={this.state}
+          yk_state={this.state}
           bindOnClickNavPaneToggle={this.bindOnClickNavPaneToggle}
           bindOnClickDrawerItem={this.bindOnClickDrawerItem}
         />
         <AppNavbar
-          ykState={this.state}
+          yk_state={this.state}
           ykTheme={this.ykTheme}
           bindOnClickNavPaneToggle={this.bindOnClickNavPaneToggle}
         />
         {(this.state.current_pane === "editor") &&
           <EditorPane
-            ykState={this.state}
+            yk_state={this.state}
             ykTheme={this.ykTheme}
             bindOnClickEditorSelectElement={this.bindOnClickEditorSelectElement}
             bindOnClickEditorHistoryItem={this.bindOnClickEditorHistoryItem}
@@ -184,30 +184,30 @@ class App extends Component {
         }
         {(this.state.current_pane === "history") &&
           <ClipBoardHistoryPane
-            ykState={this.state}
+            yk_state={this.state}
           />
         }
         {(this.state.current_pane === "export") &&
           <ExportPane
-            ykState={this.state}
+            yk_state={this.state}
             ykTheme={this.ykTheme}
             bindOnClickExportCopytext={this.bindOnClickExportCopytext}
           />
         }
         {(this.state.current_pane === "import") &&
           <ImportPane
-            ykState={this.state}
+            yk_state={this.state}
             bindOnImport={this.bindOnImport}
           />
         }
         {(this.state.current_pane === "about") &&
           <AboutPane
-            ykState={this.state}
+            yk_state={this.state}
           />
         }
 
         <AppSnackbar
-          ykState={this.state}
+          yk_state={this.state}
           bindOnClickSnackbarClose={this.bindOnClickSnackbarClose}
         />
 
@@ -252,5 +252,11 @@ IMport時のSnackBar通知
 CbHistory実装
 
 あたりかな？
+
+
+SwipeableDrawerが上手くいかんのよなー。
+SwipeableDrawer API - Material-UI
+https://material-ui.com/api/swipeable-drawer/
+
 
 */

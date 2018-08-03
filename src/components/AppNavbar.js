@@ -6,7 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 class AppNavbar extends Component {
   
   static propTypes = {
-    ykState: PropTypes.object.isRequired,
+    yk_state: PropTypes.object.isRequired,
     bindOnClickNavPaneToggle: PropTypes.func.isRequired
   };
 

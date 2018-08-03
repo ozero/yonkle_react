@@ -11,7 +11,7 @@ class AppSnackbar extends Component {
   }*/
   
   static propTypes = {
-    ykState: PropTypes.object.isRequired,
+    yk_state: PropTypes.object.isRequired,
     bindOnClickSnackbarClose: PropTypes.func.isRequired
   };
 
@@ -22,13 +22,13 @@ class AppSnackbar extends Component {
           vertical: 'bottom',
           horizontal: 'left',
         }}
-        open={this.props.ykState.isSnackbarOpen}
+        open={this.props.yk_state.is_snackbar_open}
         autoHideDuration={2000}
         onClose={this.props.bindOnClickSnackbarClose}
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">{this.props.ykState.snackBarMessage}</span>}
+        message={<span id="message-id">{this.props.yk_state.snackbar_message}</span>}
         action={[
           <IconButton
             key="close"

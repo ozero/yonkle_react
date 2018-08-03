@@ -15,19 +15,19 @@ class EditorPane extends Component {
 
     // stateの初期値を設定
     this.state = {
-      copytext: this.props.ykState.current_finalized
+      copytext: this.props.yk_state.current_finalized
     };
   }
 
   //rerender react component(with state) when prop changes
   componentWillReceiveProps(nextProps) {
-    console.log("EditorPane","copytext",nextProps.ykState.current_finalized);
-    this.setState({copytext: nextProps.ykState.current_finalized });
+    console.log("EditorPane","copytext",nextProps.yk_state.current_finalized);
+    this.setState({copytext: nextProps.yk_state.current_finalized });
   }
 
   //
   static propTypes = {
-    ykState: PropTypes.object.isRequired,
+    yk_state: PropTypes.object.isRequired,
     ykTheme: PropTypes.object.isRequired,
     bindOnClickEditorSelectElement: PropTypes.func.isRequired,
     bindOnClickEditorHistoryItem: PropTypes.func.isRequired,
@@ -36,7 +36,7 @@ class EditorPane extends Component {
 
   spawnEditElement(key, partsName){
     const el = <EditElement key={key}
-      value={this.props.ykState.history[partsName][0]}
+      value={this.props.yk_state.history[partsName][0]}
       partsName={partsName} 
       bindOnClickEditorSelectElement={this.props.bindOnClickEditorSelectElement} />;
     return el;
@@ -59,12 +59,12 @@ class EditorPane extends Component {
 
     //
     var historyList = [];
-    if(this.props.ykState !== null){
-      for(var i in this.props.ykState.history[this.props.ykState.current_element]){
+    if(this.props.yk_state !== null){
+      for(var i in this.props.yk_state.history[this.props.yk_state.current_element]){
         historyList.push(<EditHistoryitem 
           key={i}
-          partsName={this.props.ykState.current_element}
-          value={this.props.ykState.history[this.props.ykState.current_element][i]}
+          partsName={this.props.yk_state.current_element}
+          value={this.props.yk_state.history[this.props.yk_state.current_element][i]}
           bindOnClickEditorHistoryItem={this.props.bindOnClickEditorHistoryItem}
           ></EditHistoryitem>);
       }  
@@ -75,7 +75,7 @@ class EditorPane extends Component {
       <div className="pane-container">
         {editElements}
         <div>
-          { (this.props.ykState.current_element === null) &&
+          { (this.props.yk_state.current_element === null) &&
             <div className="pane-well">
               <ul>
                 <li>上のボタンを押して、それぞれカスタマイズします。</li>
@@ -85,13 +85,13 @@ class EditorPane extends Component {
               </ul>
             </div>
           }
-          { (this.props.ykState.current_element !== null) &&
+          { (this.props.yk_state.current_element !== null) &&
             <div className="pane-well">
               <div>
                 <EditFreeInput 
                   bindOnClickEditorHistoryItem={this.props.bindOnClickEditorHistoryItem}
-                  partsName={this.props.ykState.current_element}
-                  default={this.props.ykState.history[this.props.ykState.current_element][0]} />
+                  partsName={this.props.yk_state.current_element}
+                  default={this.props.yk_state.history[this.props.yk_state.current_element][0]} />
                 </div>
               <div>{historyList}</div>
             </div>
@@ -99,7 +99,7 @@ class EditorPane extends Component {
         </div>
 
         <CopyToClipboard 
-          text={this.props.ykState.current_finalized} 
+          text={this.props.yk_state.current_finalized} 
           onCopy={() => this.props.bindOnClickEditorCopytext()}
         >
           <Button variant="fab" className="yk-fab" color='primary' style={{

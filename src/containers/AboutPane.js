@@ -9,7 +9,7 @@ class AboutPane extends Component {
 
   //
   static propTypes = {
-    ykState: PropTypes.object.isRequired,
+    yk_state: PropTypes.object.isRequired,
     //bindOnClickEditorSelectElement: PropTypes.func.isRequired,
     //bindOnClickEditorHistoryItem: PropTypes.func.isRequired,
   };

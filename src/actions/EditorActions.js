@@ -21,13 +21,12 @@ class EditorActions {
     return tmpHistory;
   }
 
-  //
+  //ローカルストレージに保存
   historySerializer = (h, cbh) => {
     window.localStorage.yonkle_editor = JSON.stringify({
       history: h,
       clipboard_history: cbh
     });
-    console.log("historySerializer wrote")
     return;
   }
 
@@ -38,13 +37,15 @@ class EditorActions {
       if(i > 50){
         break;
       }
+      if(cb[i] === null){
+        continue;
+      }
       if(cb[i] !== newItem){
         tmpCb.push(cb[i]);
       }
     }
     //
     tmpCb.unshift(newItem);
-    console.log("cbstackBuilder", newItem, tmpCb);
     return tmpCb;
   }
 
