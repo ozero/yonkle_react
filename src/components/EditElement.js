@@ -18,7 +18,7 @@ class EditElement extends Component {
           color="primary"
           onClick={() => this.props.bindOnClickSelectElement(this.props.partsName)}
           variant="contained"
-          style={{minWidth: '10px',margin: '4px 4px 0 0'}}
+          style={{minWidth: '10px',margin: '4px 4px 0 0', fontSize:"14px", textTransform:"none"}}
         >{this.props.value}</Button>
       </span>
     );

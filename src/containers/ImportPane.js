@@ -32,7 +32,7 @@ class ImportPane extends Component {
     let newHistory = {};
     try {
       newHistory = JSON.parse(this.state.input);
-      if(!newHistory.prefix){
+      if(!newHistory.history){
         //TODO:スナックバーで警告
         console.log("import: non valid json");
       }else{

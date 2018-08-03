@@ -24,7 +24,7 @@ class EditHistoryitem extends Component {
           default={true}
           onClick={() => this.handleClick()}
           variant="contained"
-          style={{minWidth: '10px',margin: '4px 8px 0 0'}}
+          style={{minWidth: '10px',margin: '6px 8px 0 0', fontSize:"14px", textTransform:"none"}}
         >{this.props.value}</Button>
       </span>
     );

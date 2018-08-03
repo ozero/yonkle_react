@@ -23,24 +23,40 @@ class EditorActions {
 
   //
   historySerializer = (h) => {
-    window.localStorage.yonkle_editor = JSON.stringify(h);
+    window.localStorage.yonkle_editor = JSON.stringify({history: h});
     console.log("historySerializer wrote")
     return;
+  }
+
+  //クリップボード履歴
+  cbstackBuilder = (cb, newItem) => {
+    let tmpCb = [];//this.state.clipboard_history;
+    for(let i in cb){
+      if(i > 50){
+        break;
+      }
+      if(cb[i] !== newItem){
+        tmpCb.push(cb[i]);
+      }
+    }
+    //
+    tmpCb.unshift(newItem);
+    return tmpCb;
   }
 
   //「クリップボードにコピー」時に、エディタの内容をつなげて成果物を返すやつ
   yonkleFinalizer = (h) => {
     return [
-      h.prefix[0],
+      h.yk_prefix[0],
       "(",
-      h.faceleft[0],
-      h.eyeleft[0],
-      h.mouth[0],
-      h.eyeright[0],
-      h.faceright[0],
+      h.yk_face_left[0],
+      h.yk_eye_left[0],
+      h.yk_mouth[0],
+      h.yk_eye_right[0],
+      h.yk_face_right[0],
       ")",
-      h.suffixDingbat[0],
-      h.suffixTail[0]
+      h.yk_suffix_dingbat[0],
+      h.yk_suffix_tail[0]
     ].join("");
   }
 

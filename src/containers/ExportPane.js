@@ -28,9 +28,9 @@ class ExportPane extends Component {
         <div>
           <textarea
             style={{width:"100%", height:"10em", fontSize:"80%"}}
-          >
-            {JSON.stringify(this.props.ykState.history)}
-          </textarea>
+            value={JSON.stringify(this.props.ykState.history)}
+            readOnly={true}
+          />
         </div>
         <div style={{textAlign:"center"}}>
           <CopyToClipboard 

@@ -29,21 +29,24 @@ class App extends Component {
     this.bindOnClickSnackbarClose = this.onClickSnackbarClose.bind(this);
     this.bindOnImport = this.onImport.bind(this);
 
+    this.initHistory = {
+      yk_prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
+      yk_face_left: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
+      yk_eye_left: ['◕', '◔', 'ಠ', '⍥'],
+      yk_mouth: ["ف", "◡", "ઉ", "उ", "კ", "؈", "ᯅ", "ᜌ", "ᙟ", "༊", "ω", "ب", "ᗨ", "و", "⸐", "ਊ", "ت", "ᓌ", "咖", "🍛", "留", "緑", "雨", "焼", "飛", "英", "仏", "ー"],
+      yk_eye_right: ['◕', '◔', 'ಠ', '⍥'],
+      yk_face_right: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
+      yk_suffix_dingbat: ["꧁", "✧*｡", "༺", "༇", "✿☆"],
+      yk_suffix_tail: ["みどり💚꧂", "ｷｬﾋﾟ", "ｴﾝﾗｲ💚", "quapi", "capuit", "upc"],
+    };
+
     // stateの初期値を設定
     this.state = {
       isLoadedFromLocalstorage: false,
       currentElement: null,
       currentPane: "editor",
-      history: {
-        prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
-        faceleft: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
-        eyeleft: ['◕', '◔', 'ಠ', '⍥'],
-        mouth: ["ف", "◡", "ઉ", "उ", "კ", "؈", "ᯅ", "ᜌ", "ᙟ", "༊", "ω", "ب", "ᗨ", "و", "⸐", "ਊ", "ت", "ᓌ", "咖", "🍛", "留", "緑", "雨", "焼", "飛", "英", "仏", "ー"],
-        eyeright: ['◕', '◔', 'ಠ', '⍥'],
-        faceright: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
-        suffixDingbat: ["꧁", "✧*｡", "༺", "༇", "✿☆"],
-        suffixTail: ["みどり💚꧂", "ｷｬﾋﾟ", "ｴﾝﾗｲ💚", "quapi", "capuit", "upc"],
-      },
+      history: this.initHistory,
+      clipboard_history:[],
       isNavPaneOpen: false,
       isSnackbarOpen: false,
       snackBarMessage: null
@@ -61,12 +64,12 @@ class App extends Component {
         ea.historySerializer(this.state.history);//初期化
       } else {
         let lshistory = JSON.parse(window.localStorage.yonkle_editor);
-        if (!lshistory.prefix) {
+        if (!lshistory.history) {
           ea.historySerializer(this.state.history);//初期化
         } else {
           //読み込み&フラグ立てる
           this.setState({
-            history: lshistory,
+            history: lshistory.history,
             isLoadedFromLocalstorage: true
           });
         }
@@ -101,11 +104,10 @@ class App extends Component {
   }
   //Event:クリップボードにコピー、のクリック時: 成果物うけとり
   onClickCpcb() {
-    console.log("onClickCpcb");
     const ea = new EditorActions();
     return ea.yonkleFinalizer(this.state.history);
   }
-  //Event:クリップボードにコピー、のクリック時: メッセージ表示
+  //Event:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
   onClickCpcbOpenSb() {
     this.setState({
       isSnackbarOpen: true,
@@ -119,9 +121,14 @@ class App extends Component {
     }
     this.setState({ isSnackbarOpen: false });
   }
+  //Event:historyのリセット時
+  onClickReset() {
+    delete window.localStorage.yonkle_editor;
+    this.setState({history: this.initHistory});
+  }
 
   //インポート用データユーティリティ
-  onImport(){
+  onImport() {
     let lshistory = JSON.parse(window.localStorage.yonkle_editor);
     this.setState({
       history: lshistory,

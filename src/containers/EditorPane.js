@@ -36,16 +36,16 @@ class EditorPane extends Component {
   render() {
     //
     var editElements = []
-    editElements.push(this.spawnEditElement(0, "prefix"));
+    editElements.push(this.spawnEditElement(0, "yk_prefix"));
     editElements.push(<span key="1">(</span>);
-    editElements.push(this.spawnEditElement(2, "faceleft"));
-    editElements.push(this.spawnEditElement(3, "eyeleft"));
-    editElements.push(this.spawnEditElement(4, "mouth"));
-    editElements.push(this.spawnEditElement(5, "eyeright"));
-    editElements.push(this.spawnEditElement(6, "faceright"));
+    editElements.push(this.spawnEditElement(2, "yk_face_left"));
+    editElements.push(this.spawnEditElement(3, "yk_eye_left"));
+    editElements.push(this.spawnEditElement(4, "yk_mouth"));
+    editElements.push(this.spawnEditElement(5, "yk_eye_right"));
+    editElements.push(this.spawnEditElement(6, "yk_face_right"));
     editElements.push(<span key="7">)ﾉ</span>);
-    editElements.push(this.spawnEditElement(8, "suffixDingbat"));
-    editElements.push(this.spawnEditElement(9, "suffixTail"));
+    editElements.push(this.spawnEditElement(8, "yk_suffix_dingbat"));
+    editElements.push(this.spawnEditElement(9, "yk_suffix_tail"));
 
     //
     var historyList = [];
