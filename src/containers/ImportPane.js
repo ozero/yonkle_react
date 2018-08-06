@@ -16,7 +16,8 @@ class ImportPane extends Component {
 
   //
   static propTypes = {
-    bindOnImport: PropTypes.func.isRequired
+    bindOnImport: PropTypes.func.isRequired,
+    bindOnClickImport: PropTypes.func.isRequired
   };
 
   //
@@ -33,17 +34,14 @@ class ImportPane extends Component {
     try {
       newHistory = JSON.parse(this.state.input);
       if(!newHistory.history){
-        //TODO:スナックバーで警告
-        console.log("import: non valid json");
+        this.props.bindOnClickImport("エラー: データ項目が不正です。");
       }else{
         window.localStorage.yonkle_editor = this.state.input;
         this.props.bindOnImport();
-        //TODO:スナックバーで通知
-        console.log("imported");
+        this.props.bindOnClickImport("インポートしました。");
       }
     } catch(e) {
-        //TODO:スナックバーで警告
-        alert(e); // error in the above string (in this case, yes)!
+      this.props.bindOnClickImport("エラー: " + e);
     }
   }
   

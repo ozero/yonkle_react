@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {IconButton, SwipeableDrawer, MenuItem, Divider } from '@material-ui/core';
+import {IconButton, Drawer, MenuItem, Divider } from '@material-ui/core';
 import {ChevronLeft,Edit, History, GetApp, ExitToApp, Info} from '@material-ui/icons/';
 
 import './AppDrawer.css';
+
+
+
+
 
 class AppDrawer extends Component {
   /*constructor(props) {
@@ -19,7 +23,8 @@ class AppDrawer extends Component {
 
   render() {
     return (
-      <SwipeableDrawer className="app-drawer"
+      <Drawer className="app-drawer"
+        variant="persistent"
         anchor='left'
         open={this.props.yk_state.is_navpane_open}
       >
@@ -64,7 +69,7 @@ class AppDrawer extends Component {
         >
           <Info className="menuitem-icon" />About
         </MenuItem>
-      </SwipeableDrawer>
+      </Drawer>
     );
   }
 }

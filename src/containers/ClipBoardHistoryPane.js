@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {Button} from '@material-ui/core';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 class ClipBoardHistoryPane extends Component {
   //
@@ -11,8 +12,8 @@ class ClipBoardHistoryPane extends Component {
   //
   static propTypes = {
     yk_state: PropTypes.object.isRequired,
-    //bindOnClickEditorSelectElement: PropTypes.func.isRequired,
-    //bindOnClickEditorHistoryItem: PropTypes.func.isRequired,
+    bindOnClickSnackbarClose: PropTypes.func.isRequired,
+    bindOnClickCbhCopytext: PropTypes.func.isRequired
   };
 
   render() {
@@ -22,16 +23,24 @@ class ClipBoardHistoryPane extends Component {
         continue;
       }
       cbHistory.push(
-        <div className="cbh_item" key={i}><Button variant="contained" className="cbh_item">
-          {this.props.yk_state.clipboard_history[i]}
-        </Button></div>
+        <div className="cbh_item" key={i}>
+
+          <CopyToClipboard 
+            text={this.props.yk_state.clipboard_history[i]} 
+            onCopy={() => this.props.bindOnClickCbhCopytext(this.props.yk_state.clipboard_history[i])}
+          >
+            <Button variant="contained" className="cbh_item">
+              {this.props.yk_state.clipboard_history[i]}
+            </Button>
+          </CopyToClipboard>
+        </div>
       );
     }
 
     //
     return (
       <div className="pane-container">
-        <div>clipboard history item list.</div>
+        <p>clipboard history item list.</p>
         <div>{cbHistory}</div>
       </div>
     );

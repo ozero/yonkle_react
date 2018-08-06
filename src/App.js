@@ -20,12 +20,17 @@ class App extends Component {
     super(props);
 
     // 子コンポーネントにイベント処理を公開するため、thisをbindしておく
-    this.bindOnClickEditorSelectElement = this.onClickEditorSelectElement.bind(this);
-    this.bindOnClickEditorHistoryItem = this.onClickEditorHistoryItem.bind(this);
     this.bindOnClickNavPaneToggle = this.onClickNavPaneToggle.bind(this);
     this.bindOnClickDrawerItem = this.onClickDrawerItem.bind(this);
-    this.bindOnClickEditorCopytext = this.onClickEditorCopytext.bind(this);
     this.bindOnClickSnackbarClose = this.onClickSnackbarClose.bind(this);
+
+    this.bindOnClickEditorSelectElement = this.onClickEditorSelectElement.bind(this);
+    this.bindOnClickEditorHistoryItem = this.onClickEditorHistoryItem.bind(this);
+    this.bindOnClickEditorCopytext = this.onClickEditorCopytext.bind(this);
+
+    this.bindOnClickCbhCopytext = this.onClickCbhCopytext.bind(this);
+
+    this.bindOnClickImport = this.onClickImport.bind(this);
     this.bindOnImport = this.onImport.bind(this);
     this.bindOnClickExportCopytext = this.onClickExportCopytext.bind(this);
 
@@ -80,12 +85,28 @@ class App extends Component {
 
   }
 
-  //Event: 文節をクリックしたら候補を表示
+  //App Event: ナビゲーションペインの開閉
+  onClickNavPaneToggle() {
+    console.log("onClickNavPaneToggle");
+    this.setState({
+      is_navpane_open: !this.state.is_navpane_open
+    })
+  }
+  //App Event: コンテンツペインの切り替え
+  onClickDrawerItem(partsName) {
+    console.log("onClickDrawerItem");
+    this.setState({
+      current_pane: partsName,
+      is_navpane_open: false
+    });
+  }
+
+  //Editor Event: 文節をクリックしたら候補を表示
   onClickEditorSelectElement(partsName) {
     console.log("onClickEditorSelectElement");
     this.setState({ current_element: partsName });
   }
-  //Event: 候補をクリックしたら状態を更新
+  //Editor Event: 候補をクリックしたら状態を更新
   onClickEditorHistoryItem(partsName, value) {
     console.log("onClickEditorHistoryItem");
     const ea = new EditorActions();
@@ -100,22 +121,7 @@ class App extends Component {
       current_finalized: newItem
     });
   }
-  //Event: ナビゲーションペインの開閉
-  onClickNavPaneToggle() {
-    console.log("onClickNavPaneToggle");
-    this.setState({
-      is_navpane_open: !this.state.is_navpane_open
-    })
-  }
-  //Event: コンテンツペインの切り替え
-  onClickDrawerItem(partsName) {
-    console.log("onClickDrawerItem");
-    this.setState({
-      current_pane: partsName,
-      is_navpane_open: false
-    });
-  }
-  //Event:Editor:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
+  //Editor Event:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
   onClickEditorCopytext() {
     console.log("onClickEditorCopytext");
     const ea = new EditorActions();
@@ -128,7 +134,7 @@ class App extends Component {
       clipboard_history: newCb
     });
   }
-  //Event:スナックバーのクローズ時
+  //Editor Event:スナックバーのクローズ時
   onClickSnackbarClose(event, reason) {
     console.log("onClickSnackbarClose");
     if (reason === 'clickaway') {
@@ -136,19 +142,35 @@ class App extends Component {
     }
     this.setState({ is_snackbar_open: false });
   }
-  //
+
+  //Clipboard history Event:アイテムクリック時
+  onClickCbhCopytext(newItem){
+    const ea = new EditorActions();
+    const newCb = ea.cbstackBuilder(this.state.clipboard_history, newItem);
+    this.setState({
+      is_snackbar_open: true,
+      snackbar_message: "クリップボードにコピーしました",
+      clipboard_history: newCb
+    });
+  }
+
+  //Export Event: エクスポートのコピペクリック時
   onClickExportCopytext(){
-
+    this.setState({
+      is_snackbar_open: true,
+      snackbar_message: "クリップボードにコピーしました"
+    });
   }
 
-  //Event:historyのリセット時
-  onClickReset() {
-    console.log("onClickReset");
-    delete window.localStorage.yonkle_editor;
-    this.setState({history: this.initHistory});
+  //Import Event: エクスポートのコピペクリック時
+  onClickImport(msg){
+    this.setState({
+      is_snackbar_open: true,
+      snackbar_message: msg
+    });
   }
 
-  //インポート用データユーティリティ
+  //Import Event: インポート用データユーティリティ
   onImport() {
     console.log("onImport");
     let lshistory = JSON.parse(window.localStorage.yonkle_editor);
@@ -159,6 +181,14 @@ class App extends Component {
       snackbar_message: "インポートしました"
     });
   }
+
+  //About Event: historyのリセット時
+  onClickReset() {
+    console.log("onClickReset");
+    delete window.localStorage.yonkle_editor;
+    this.setState({history: this.initHistory});
+  }
+
 
   render() {
     return (
@@ -184,6 +214,7 @@ class App extends Component {
         }
         {(this.state.current_pane === "history") &&
           <ClipBoardHistoryPane
+            bindOnClickCbhCopytext={this.bindOnClickCbhCopytext}
             yk_state={this.state}
           />
         }
@@ -197,6 +228,7 @@ class App extends Component {
         {(this.state.current_pane === "import") &&
           <ImportPane
             yk_state={this.state}
+            bindOnClickImport = {this.bindOnClickImport}
             bindOnImport={this.bindOnImport}
           />
         }
@@ -245,18 +277,6 @@ npm install material-ui-icons --save
 
 javascript - In reactJS, how to copy text to clipboard? - Stack Overflow
 https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-
-
-bindOnClickExportCopytextの実装
-IMport時のSnackBar通知
-CbHistory実装
-
-あたりかな？
-
-
-SwipeableDrawerが上手くいかんのよなー。
-SwipeableDrawer API - Material-UI
-https://material-ui.com/api/swipeable-drawer/
 
 
 */
