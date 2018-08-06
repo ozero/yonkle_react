@@ -5,3 +5,5 @@
 其の動物アイコン者は現代のSPAには昏く、DOMいじりしか芸がなかったため、ひとまずJQueryで実装されAgent Olympiad 2018に間に合う形でとてもローカルにリリースされた( https://test.currentdir.com/yonkle/ )。
 
 そしてAgent Olympiad 2018も終わり、吉法氏のスコア振り返りトークもPostされる中、NuxtかCreate-react-appかと迷いつつ、ようやくReact.js版の実装をチュートリアルがてらに試してみるかと手を付けたのだった…。
+
+なお、完成し、 https://test.currentdir.com/yonkle_react/ としてアップロードされている。
