@@ -33,6 +33,7 @@ class App extends Component {
     this.bindOnClickImport = this.onClickImport.bind(this);
     this.bindOnImport = this.onImport.bind(this);
     this.bindOnClickExportCopytext = this.onClickExportCopytext.bind(this);
+    this.bindOnClickReset = this.onClickReset.bind(this);
 
     this.initial_history = {
       yk_prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
@@ -77,7 +78,8 @@ class App extends Component {
           this.setState({
             history: tmpLocalStorage.history,
             clipboard_history: tmpLocalStorage.clipboard_history,
-            is_loaded_from_localstorage: true
+            is_loaded_from_localstorage: true,
+            current_finalized: ea.yonkleFinalizer(tmpLocalStorage.history)
           });
         }
       }
@@ -103,17 +105,17 @@ class App extends Component {
 
   //Editor Event: 文節をクリックしたら候補を表示
   onClickEditorSelectElement(partsName) {
-    console.log("onClickEditorSelectElement");
+    console.log("onClickEditorSelectElement()");
     this.setState({ current_element: partsName });
   }
   //Editor Event: 候補をクリックしたら状態を更新
   onClickEditorHistoryItem(partsName, value) {
-    console.log("onClickEditorHistoryItem");
+    console.log("onClickEditorHistoryItem()");
     const ea = new EditorActions();
     //アイテム履歴を更新
     const newHistory = ea.historyBuilder(this.state.history, partsName, value);
     this.setState({ history: newHistory });
-    //ローカスストレージに保存s
+    //新しいアイテム履歴をローカスストレージに保存
     ea.historySerializer(newHistory, this.state.clipboard_history);
     //クリップボードにコピーする内容を更新
     const newItem = ea.yonkleFinalizer(this.state.history);
@@ -123,7 +125,8 @@ class App extends Component {
   }
   //Editor Event:クリップボードにコピー、のクリック時: メッセージ表示、Cbヒストリ追加
   onClickEditorCopytext() {
-    console.log("onClickEditorCopytext");
+    console.log("onClickEditorCopytext()");
+    //クリップボードヒストリを更新してStateに反映
     const ea = new EditorActions();
     const newCb = ea.cbstackBuilder(
       this.state.clipboard_history, this.state.current_finalized
@@ -133,10 +136,12 @@ class App extends Component {
       snackbar_message: "クリップボードにコピーしました",
       clipboard_history: newCb
     });
+    //新しいクリップボードヒストリをLocalStorageに保存
+    ea.historySerializer(this.state.history, newCb);
   }
   //Editor Event:スナックバーのクローズ時
   onClickSnackbarClose(event, reason) {
-    console.log("onClickSnackbarClose");
+    console.log("onClickSnackbarClose()");
     if (reason === 'clickaway') {
       return;
     }
@@ -145,6 +150,7 @@ class App extends Component {
 
   //Clipboard history Event:アイテムクリック時
   onClickCbhCopytext(newItem){
+    console.log("onClickCbhCopytext()");
     const ea = new EditorActions();
     const newCb = ea.cbstackBuilder(this.state.clipboard_history, newItem);
     this.setState({
@@ -156,6 +162,7 @@ class App extends Component {
 
   //Export Event: エクスポートのコピペクリック時
   onClickExportCopytext(){
+    console.log("onClickExportCopytext()");
     this.setState({
       is_snackbar_open: true,
       snackbar_message: "クリップボードにコピーしました"
@@ -164,6 +171,7 @@ class App extends Component {
 
   //Import Event: エクスポートのコピペクリック時
   onClickImport(msg){
+    console.log("onClickImport()");
     this.setState({
       is_snackbar_open: true,
       snackbar_message: msg
@@ -172,7 +180,7 @@ class App extends Component {
 
   //Import Event: インポート用データユーティリティ
   onImport() {
-    console.log("onImport");
+    console.log("onImport()");
     let lshistory = JSON.parse(window.localStorage.yonkle_editor);
     this.setState({
       history: lshistory,
@@ -184,9 +192,15 @@ class App extends Component {
 
   //About Event: historyのリセット時
   onClickReset() {
-    console.log("onClickReset");
-    delete window.localStorage.yonkle_editor;
-    this.setState({history: this.initHistory});
+    console.log("onClickReset()");
+    if(window.confirm("マジで？")){
+      delete window.localStorage.yonkle_editor;
+      this.setState({
+        history: this.initial_history,
+        is_snackbar_open: true,
+        snackbar_message: "あなたは新しいよんくるライフに転生しました"
+      });
+    }
   }
 
 
@@ -235,6 +249,7 @@ class App extends Component {
         {(this.state.current_pane === "about") &&
           <AboutPane
             yk_state={this.state}
+            bindOnClickReset={this.bindOnClickReset}
           />
         }
 
@@ -277,6 +292,12 @@ npm install material-ui-icons --save
 
 javascript - In reactJS, how to copy text to clipboard? - Stack Overflow
 https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+
+
+初期状態でコピー押すとクリップボードによんくるが入ってこない
+
+クリップボードヒストリの履歴管理がまずい
+
 
 
 */

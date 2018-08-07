@@ -6,14 +6,7 @@ import {ChevronLeft,Edit, History, GetApp, ExitToApp, Info} from '@material-ui/i
 
 import './AppDrawer.css';
 
-
-
-
-
 class AppDrawer extends Component {
-  /*constructor(props) {
-    super(props);  
-  }*/
   
   static propTypes = {
     yk_state: PropTypes.object.isRequired,

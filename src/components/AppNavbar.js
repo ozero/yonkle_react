@@ -14,8 +14,8 @@ class AppNavbar extends Component {
     return (
       <AppBar position="static">
         <Toolbar>
-          <IconButton color="inherit" aria-label="Menu">
-            <MenuIcon onClick={() => this.props.bindOnClickNavPaneToggle()} />
+          <IconButton color="inherit" aria-label="Menu" onClick={() => this.props.bindOnClickNavPaneToggle()} >
+            <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit">
           ෆ◕◡◕

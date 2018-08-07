@@ -7,15 +7,10 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 
 class ExportPane extends Component {
-  //
-  /*constructor(props) {
-    super(props);
-  }*/
 
   //
   static propTypes = {
     yk_state: PropTypes.object.isRequired,
-    ykTheme: PropTypes.object.isRequired,
     bindOnClickExportCopytext: PropTypes.func.isRequired
   };
 

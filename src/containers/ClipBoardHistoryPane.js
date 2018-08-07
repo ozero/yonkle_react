@@ -4,15 +4,10 @@ import {Button} from '@material-ui/core';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 class ClipBoardHistoryPane extends Component {
-  //
-  /*constructor(props) {
-    super(props);
-  }*/
 
   //
   static propTypes = {
     yk_state: PropTypes.object.isRequired,
-    bindOnClickSnackbarClose: PropTypes.func.isRequired,
     bindOnClickCbhCopytext: PropTypes.func.isRequired
   };
 

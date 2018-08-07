@@ -6,10 +6,7 @@ import { IconButton, Snackbar } from '@material-ui/core';
 import { Close } from '@material-ui/icons/';
 
 class AppSnackbar extends Component {
-  /*constructor(props) {
-    super(props);  
-  }*/
-  
+
   static propTypes = {
     yk_state: PropTypes.object.isRequired,
     bindOnClickSnackbarClose: PropTypes.func.isRequired
@@ -23,7 +20,7 @@ class AppSnackbar extends Component {
           horizontal: 'left',
         }}
         open={this.props.yk_state.is_snackbar_open}
-        autoHideDuration={2000}
+        autoHideDuration={6000}
         onClose={this.props.bindOnClickSnackbarClose}
         ContentProps={{
           'aria-describedby': 'message-id',

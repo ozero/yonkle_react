@@ -21,7 +21,7 @@ class EditorPane extends Component {
 
   //rerender react component(with state) when prop changes
   componentWillReceiveProps(nextProps) {
-    console.log("EditorPane","copytext",nextProps.yk_state.current_finalized);
+    console.log("EditorPane::componentWillReceiveProps()","setState:copytext",nextProps.yk_state.current_finalized);
     this.setState({copytext: nextProps.yk_state.current_finalized });
   }
 
@@ -44,7 +44,8 @@ class EditorPane extends Component {
   
   //別にコンポ分割せんでもここにべた書きでも良かったなー
   render() {
-    //
+
+    //editElementsを顔文字の形にView化
     var editElements = []
     editElements.push(this.spawnEditElement(0, "yk_prefix"));
     editElements.push(<span key="1">(</span>);
@@ -57,7 +58,7 @@ class EditorPane extends Component {
     editElements.push(this.spawnEditElement(8, "yk_suffix_dingbat"));
     editElements.push(this.spawnEditElement(9, "yk_suffix_tail"));
 
-    //
+    //editElementsタップ時に展開する、対応する要素クリック履歴をView化
     var historyList = [];
     if(this.props.yk_state !== null){
       for(var i in this.props.yk_state.history[this.props.yk_state.current_element]){
@@ -99,7 +100,7 @@ class EditorPane extends Component {
         </div>
 
         <CopyToClipboard 
-          text={this.props.yk_state.current_finalized} 
+          text={this.state.copytext}
           onCopy={() => this.props.bindOnClickEditorCopytext()}
         >
           <Button variant="fab" className="yk-fab" color='primary' style={{
@@ -110,7 +111,6 @@ class EditorPane extends Component {
             <ContentCopy />
           </Button>        
         </CopyToClipboard>
-
 
       </div>
     );

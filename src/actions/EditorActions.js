@@ -1,10 +1,5 @@
 class EditorActions {
 
-  //stub
-  foo(bar){
-    console.log("EditorActions::foo()",bar);
-  }
-
   //候補アイテムクリック時のクリック後stateを生成
   historyBuilder = (history, partsName, value) => {
     let tmpHistory = history;//this.state.history;
@@ -31,26 +26,28 @@ class EditorActions {
   }
 
   //クリップボード履歴
-  cbstackBuilder = (cb, newItem) => {
-    let tmpCb = [];//this.state.clipboard_history;
-    for(let i in cb){
+  cbstackBuilder = (currentCb, newItem) => {
+    let tmpCb = [];//currentCb: this.state.clipboard_history
+    for(let i in currentCb){
       if(i > 50){
         break;
       }
-      if(cb[i] === null){
+      if(currentCb[i] === null){
         continue;
       }
-      if(cb[i] !== newItem){
-        tmpCb.push(cb[i]);
+      if(currentCb[i] !== newItem){
+        tmpCb.push(currentCb[i]);
       }
     }
     //
     tmpCb.unshift(newItem);
+    //console.log("cbstackBuilder",currentCb,tmpCb);
     return tmpCb;
   }
 
   //「クリップボードにコピー」時に、エディタの内容をつなげて成果物を返すやつ
   yonkleFinalizer = (h) => {
+    //h: this.state.history
     return [
       h.yk_prefix[0],
       "(",
@@ -59,7 +56,7 @@ class EditorActions {
       h.yk_mouth[0],
       h.yk_eye_right[0],
       h.yk_face_right[0],
-      ")",
+      ")ﾉ",
       h.yk_suffix_dingbat[0],
       h.yk_suffix_tail[0]
     ].join("");
