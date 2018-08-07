@@ -136,7 +136,8 @@ class App extends Component {
     this.setState({
       is_snackbar_open: true,
       snackbar_message: "クリップボードにコピーしました",
-      clipboard_history: newCb
+      clipboard_history: newCb,
+      current_element: null
     });
     //新しいクリップボードヒストリをLocalStorageに保存
     ea.historySerializer(this.state.history, newCb);
