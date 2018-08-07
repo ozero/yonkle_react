@@ -93,7 +93,7 @@ class EditorPane extends Component {
                   bindOnClickEditorHistoryItem={this.props.bindOnClickEditorHistoryItem}
                   partsName={this.props.yk_state.current_element}
                   default={this.props.yk_state.history[this.props.yk_state.current_element][0]} />
-                </div>
+              </div>
               <div>{historyList}</div>
             </div>
           }
@@ -104,7 +104,7 @@ class EditorPane extends Component {
           onCopy={() => this.props.bindOnClickEditorCopytext()}
         >
           <Button variant="fab" className="yk-fab" color='secondary' style={{
-            position: 'absolute',
+            position: 'fixed',
             bottom: this.props.ykTheme.spacing.unit * 2,
             right: this.props.ykTheme.spacing.unit * 2,
           }}>

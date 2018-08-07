@@ -12,7 +12,7 @@ class AppNavbar extends Component {
 
   render() {
     return (
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           <IconButton color="inherit" aria-label="Menu" onClick={() => this.props.bindOnClickNavPaneToggle()} >
             <MenuIcon />
