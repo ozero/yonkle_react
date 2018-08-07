@@ -80,9 +80,9 @@ class EditorPane extends Component {
             <div className="pane-well">
               <ul>
                 <li>上のボタンを押して、それぞれカスタマイズします。</li>
-                <li>右下の緑のボタンを押して、クリップボードにコピーできます。</li>
+                <li>右下のボタンを押して、クリップボードにコピーできます。</li>
                 <li>次に開いたときも使えるよう、localStorageに保存しています</li>
-                <li>ヘルプからヒストリ・データをリセットできます。</li>
+                <li>Aboutからヒストリをリセットできます。</li>
               </ul>
             </div>
           }
@@ -103,7 +103,7 @@ class EditorPane extends Component {
           text={this.state.copytext}
           onCopy={() => this.props.bindOnClickEditorCopytext()}
         >
-          <Button variant="fab" className="yk-fab" color='primary' style={{
+          <Button variant="fab" className="yk-fab" color='secondary' style={{
             position: 'absolute',
             bottom: this.props.ykTheme.spacing.unit * 2,
             right: this.props.ykTheme.spacing.unit * 2,
