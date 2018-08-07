@@ -24,7 +24,11 @@ class ClipBoardHistoryPane extends Component {
             text={this.props.yk_state.clipboard_history[i]} 
             onCopy={() => this.props.bindOnClickCbhCopytext(this.props.yk_state.clipboard_history[i])}
           >
-            <Button variant="contained" className="cbh_item">
+            <Button 
+              className="cbh_item"
+              variant="contained" 
+              style={{textTransform:"none"}}
+            >
               {this.props.yk_state.clipboard_history[i]}
             </Button>
           </CopyToClipboard>

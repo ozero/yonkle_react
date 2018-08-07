@@ -15,6 +15,10 @@ class ExportPane extends Component {
   };
 
   render() {
+    const exportJson = JSON.stringify({
+      history:this.props.yk_state.history,
+      clipboard_history:this.props.yk_state.clipboard_history
+    });
     //
     return (
       <div className="pane-container">
@@ -22,13 +26,13 @@ class ExportPane extends Component {
         <div>
           <textarea
             style={{width:"100%", height:"10em", fontSize:"80%"}}
-            value={JSON.stringify(this.props.yk_state.history)}
+            value={exportJson}
             readOnly={true}
           />
         </div>
         <div style={{textAlign:"center"}}>
           <CopyToClipboard 
-            text={JSON.stringify(this.props.yk_state.history)} 
+            text={exportJson} 
             onCopy={() => this.props.bindOnClickExportCopytext()}
           >
             <Button className="yk-export" color='secondary' variant="contained">

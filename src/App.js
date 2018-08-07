@@ -31,19 +31,18 @@ class App extends Component {
     this.bindOnClickCbhCopytext = this.onClickCbhCopytext.bind(this);
 
     this.bindOnClickImport = this.onClickImport.bind(this);
-    this.bindOnImport = this.onImport.bind(this);
     this.bindOnClickExportCopytext = this.onClickExportCopytext.bind(this);
     this.bindOnClickReset = this.onClickReset.bind(this);
 
     this.initial_history = {
       yk_prefix: ['おはよんくるー', '大天空んくるー', '頑張るんくるー', 'おひるんくるー'],
-      yk_face_left: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
+      yk_face_left: ['ෆ', '࿑', '๑', 'ཛྷ྆'],
       yk_eye_left: ['◕', '◔', 'ಠ', '⍥'],
-      yk_mouth: ["ف", "◡", "ઉ", "उ", "კ", "؈", "ᯅ", "ᜌ", "ᙟ", "༊", "ω", "ب", "ᗨ", "و", "⸐", "ਊ", "ت", "ᓌ", "咖", "🍛", "留", "緑", "雨", "焼", "飛", "英", "仏", "ー"],
+      yk_mouth: ["◡", "ف", "ઉ", "उ", "კ", "؈", "ᯅ", "ᜌ", "ᙟ", "༊", "ω", "ب", "ᗨ", "و", "⸐", "ਊ", "ت", "ᓌ", "咖", "🍛", "留", "緑", "雨", "焼", "飛", "英", "仏", "ー"],
       yk_eye_right: ['◕', '◔', 'ಠ', '⍥'],
-      yk_face_right: ['࿑', 'ෆ', '๑', 'ཛྷ྆'],
-      yk_suffix_dingbat: ["꧁", "✧*｡", "༺", "༇", "✿☆"],
-      yk_suffix_tail: ["みどり💚꧂", "ｷｬﾋﾟ", "ｴﾝﾗｲ💚", "quapi", "capuit", "upc"],
+      yk_face_right: ['ෆ', '࿑', '๑', 'ཛྷ྆'],
+      yk_suffix_dingbat: ["｡+ ✿☆", "꧁", "✧*｡", "༺", "༇"],
+      yk_suffix_tail: ["ｷｬﾋﾟ", "みどり💚꧂", "ｴﾝﾗｲ💚", "quapi", "capuit", "upc"],
     };
 
     // stateの初期値を設定
@@ -68,13 +67,16 @@ class App extends Component {
     if (!this.state.is_loaded_from_localstorage) {
       const ea = new EditorActions();
       if (!window.localStorage.yonkle_editor) {
+        console.log("App::componentWillMount(), ls init 1")
         ea.historySerializer(this.state.history, []);//初期化
       } else {
         let tmpLocalStorage = JSON.parse(window.localStorage.yonkle_editor);
         if (!tmpLocalStorage.history) {
+          console.log("App::componentWillMount(), ls init 2")
           ea.historySerializer(this.state.history, []);//初期化
         } else {
           //読み込み&フラグ立てる
+          console.log("App::componentWillMount(), ls loaded")
           this.setState({
             history: tmpLocalStorage.history,
             clipboard_history: tmpLocalStorage.clipboard_history,
@@ -89,14 +91,14 @@ class App extends Component {
 
   //App Event: ナビゲーションペインの開閉
   onClickNavPaneToggle() {
-    console.log("onClickNavPaneToggle");
+    console.log("onClickNavPaneToggle()");
     this.setState({
       is_navpane_open: !this.state.is_navpane_open
     })
   }
   //App Event: コンテンツペインの切り替え
   onClickDrawerItem(partsName) {
-    console.log("onClickDrawerItem");
+    console.log("onClickDrawerItem()");
     this.setState({
       current_pane: partsName,
       is_navpane_open: false
@@ -141,7 +143,7 @@ class App extends Component {
   }
   //Editor Event:スナックバーのクローズ時
   onClickSnackbarClose(event, reason) {
-    console.log("onClickSnackbarClose()");
+    console.log("onClickSnackbarClose()", event, reason);
     if (reason === 'clickaway') {
       return;
     }
@@ -169,24 +171,23 @@ class App extends Component {
     });
   }
 
-  //Import Event: エクスポートのコピペクリック時
-  onClickImport(msg){
+  //Import Event: インポート時データユーティリティ
+  onClickImport(didSuccessToImport, msg, data){
     console.log("onClickImport()");
-    this.setState({
-      is_snackbar_open: true,
-      snackbar_message: msg
-    });
-  }
+    if(!didSuccessToImport){
+      this.setState({
+        is_snackbar_open: true,
+        snackbar_message: msg
+      });
+      return;
+    }
 
-  //Import Event: インポート用データユーティリティ
-  onImport() {
-    console.log("onImport()");
-    let lshistory = JSON.parse(window.localStorage.yonkle_editor);
     this.setState({
-      history: lshistory,
+      history: data.history,
+      clipboard_history: data.clipboard_history,
       is_loaded_from_localstorage: true,
       is_snackbar_open: true,
-      snackbar_message: "インポートしました"
+      snackbar_message: msg
     });
   }
 
@@ -195,8 +196,11 @@ class App extends Component {
     console.log("onClickReset()");
     if(window.confirm("マジで？")){
       delete window.localStorage.yonkle_editor;
+      const ea = new EditorActions();
       this.setState({
         history: this.initial_history,
+        clipboard_history: [],
+        current_finalized: ea.yonkleFinalizer(this.initial_history),
         is_snackbar_open: true,
         snackbar_message: "あなたは新しいよんくるライフに転生しました"
       });
